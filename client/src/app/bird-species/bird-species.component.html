@@ -1,0 +1,36 @@
+<div id="hotel">
+  <h1>Bird Species</h1>
+
+  <div class="divider"></div>
+
+  <table id="ht" align="center" border="1" width="1000" class="table-striped table-hover">
+    <thead class="header">
+      <th class="contentCell">Nom Scientifique</th>
+      <th class="contentCell">Nom commun</th>
+      <th class="contentCell">Statut</th>
+      <th class="actionCell">Prédateur</th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let hotel of hotels; let i = index">
+        <td class="contentCell">{{ hotel.hotelnb }}</td>
+        <td class="contentCell" contenteditable="true" (blur)="changeHotelName($event, i)">{{ hotel.name}}</td>
+        <td class="contentCell" contenteditable="true" (blur)="changeHotelCity($event, i)">{{ hotel.city }}</td>
+        <td class="actionCell">
+          <button type="button" class="submitbtn" (click)="updateHotel(i)"><i class="fa fa-edit"></i></button>
+          <button type="button" class="deletebtn" (click)="deleteHotel(hotel.hotelnb)"><i class="fa fa-trash-o"></i></button>
+        </td>
+      </tr>
+
+      <tr class="blank_row">
+        <td class="contentCell" contenteditable="true" placeholder="Nouveau nom" #newHotelNb></td>
+        <td class="contentCell" contenteditable="true" placeholder="New Name" #newHotelName></td>
+        <td class="contentCell" contenteditable="true" placeholder="New City" #newHotelCity></td>
+        <td class="contentCell"></td>
+    </tr>
+
+    </tbody>
+  </table>
+
+  <button type="button" class="btn" (click)="insertHotel()">+</button>
+
+</div>
