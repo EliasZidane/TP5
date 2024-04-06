@@ -58,15 +58,18 @@ export class EditComponent implements OnInit {
     specie.statutspeces = editField;
   }
   public changeSpeciePredator(event: any, specie: Especeoiseau){
+    console.log(event.target.textContent)
     const editField = event.target.textContent;
     specie.nomscientifiquecomsommer = editField;
-  }
+}
   
 
   public updateSpecie(specie: Especeoiseau)  {
+    console.log(specie.nomscientifiquecomsommer)
     if (specie.nomscientifiquecomsommer === "") {
       specie.nomscientifiquecomsommer = null;
     }
+    console.log(specie);
     this.communicationService.updateSpecie(specie).subscribe((result: number) => {
       if (result === 0) {
         this.duplicateError = true;

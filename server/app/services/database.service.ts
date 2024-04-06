@@ -83,7 +83,9 @@ export class DatabaseService {
     if (specie.nomscientifique.length > 0) toUpdateValues.push(`nomscientifique = '${specie.nomscientifique}'`);
     if (specie.nomcommun && specie.nomcommun.length > 0) toUpdateValues.push(`nomcommun = '${specie.nomcommun}'`);
     if (specie.statutspeces && specie.statutspeces.length > 0) toUpdateValues.push(`statutspeces = '${specie.statutspeces}'`);
-    if (specie.nomscientifiquecomsommer && specie.nomscientifiquecomsommer.length > 0) toUpdateValues.push(`nomscientifiquecomsommer = '${specie.nomscientifiquecomsommer}'`);
+    // if (specie.nomscientifiquecomsommer && specie.nomscientifiquecomsommer.length > 0) 
+      console.log(specie.nomscientifiquecomsommer)
+      toUpdateValues.push( specie.nomscientifiquecomsommer? `nomscientifiquecomsommer = '${specie.nomscientifiquecomsommer}'` : `nomscientifiquecomsommer = null`);
 
     // if (
     //   !specie.nomscientifique ||
