@@ -1,7 +1,7 @@
 -- Voici des exemples d'insertion pour les diférentes tables de votre base de donnée pour vous aider lors de la création de votre application ou de vos requêtes 
 -- N'hésitez pas à ajouter d'autres exemplaires à une table si necessaire
 
-SET search_path = ornithologue_bd;
+SET search_path = ornithologue_db;
 
 -- Insérer des observateurs
 INSERT INTO Observateur VALUES 

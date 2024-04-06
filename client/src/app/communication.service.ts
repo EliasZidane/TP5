@@ -4,8 +4,6 @@ import { Injectable } from "@angular/core";
 import { of, Observable, Subject } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Especeoiseau } from "../../../common/tables/Especeoiseau";
-import { Room } from "../../../common/tables/Room";
-import { Guest } from "../../../common/tables/Guest";
 
 @Injectable()
 export class CommunicationService {
@@ -23,6 +21,7 @@ export class CommunicationService {
   }
 
   public getSpecies(): Observable<Especeoiseau[]> {
+    console.log("dans getSpecies communication Service")
     return this.http
       .get<Especeoiseau[]>(this.BASE_URL + "/birdSpecies")
       .pipe(catchError(this.handleError<Especeoiseau[]>("getSpecies")));
@@ -46,29 +45,29 @@ export class CommunicationService {
       .pipe(catchError(this.handleError<number>("deleteHotel")));
   }
 
-  public getHotelPKs(): Observable<HotelPK[]> {
-    return this.http
-      .get<HotelPK[]>(this.BASE_URL + "/hotels/hotelNb")
-      .pipe(catchError(this.handleError<HotelPK[]>("getHotelPKs")));
-  }
+  // public getHotelPKs(): Observable<HotelPK[]> {
+  //   return this.http
+  //     .get<HotelPK[]>(this.BASE_URL + "/hotels/hotelNb")
+  //     .pipe(catchError(this.handleError<HotelPK[]>("getHotelPKs")));
+  // }
 
-  public getRooms(hotelNb: string): Observable<Room[]> {
-    return this.http
-      .get<Room[]>(this.BASE_URL + `/rooms?hotelNb=${hotelNb}`)
-      .pipe(catchError(this.handleError<Room[]>("getRooms")));
-  }
+  // public getRooms(hotelNb: string): Observable<Room[]> {
+  //   return this.http
+  //     .get<Room[]>(this.BASE_URL + `/rooms?hotelNb=${hotelNb}`)
+  //     .pipe(catchError(this.handleError<Room[]>("getRooms")));
+  // }
 
-  public insertRoom(room: Room): Observable<number> {
-    return this.http
-      .post<number>(this.BASE_URL + "/rooms/insert", room)
-      .pipe(catchError(this.handleError<number>("inserHotel")));
-  }
+  // public insertRoom(room: Room): Observable<number> {
+  //   return this.http
+  //     .post<number>(this.BASE_URL + "/rooms/insert", room)
+  //     .pipe(catchError(this.handleError<number>("inserHotel")));
+  // }
 
-  public updateRoom(room: Room): Observable<number> {
-    return this.http
-      .put<number>(this.BASE_URL + "/rooms/update", room)
-      .pipe(catchError(this.handleError<number>("updateRoom")));
-  }
+  // public updateRoom(room: Room): Observable<number> {
+  //   return this.http
+  //     .put<number>(this.BASE_URL + "/rooms/update", room)
+  //     .pipe(catchError(this.handleError<number>("updateRoom")));
+  // }
 
   public deleteRoom(hotelNb: string, roomNb: string): Observable<number> {
     return this.http
@@ -76,11 +75,11 @@ export class CommunicationService {
       .pipe(catchError(this.handleError<number>("deleteRoom")));
   }
 
-  public getGuests(hotelNb: string, roomNb: string): Observable<Guest[]> {
-    return this.http
-      .get<Guest[]>(this.BASE_URL + `/guests/${hotelNb}/${roomNb}`)
-      .pipe(catchError(this.handleError<Guest[]>("getGuests")));
-  }
+  // public getGuests(hotelNb: string, roomNb: string): Observable<Guest[]> {
+  //   return this.http
+  //     .get<Guest[]>(this.BASE_URL + `/guests/${hotelNb}/${roomNb}`)
+  //     .pipe(catchError(this.handleError<Guest[]>("getGuests")));
+  // }
 
   private handleError<T>(
     request: string,

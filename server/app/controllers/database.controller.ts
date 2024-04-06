@@ -3,9 +3,9 @@ import { inject, injectable } from "inversify";
 import * as pg from "pg";
 
 import { Especeoiseau } from "../../../common/tables/Especeoiseau";
-import { HotelPK } from "../../../common/tables/HotelPK";
-import { Room } from "../../../common/tables/Room";
-import { Guest } from "../../../common/tables/Guest";
+// import { HotelPK } from "../../../common/tables/HotelPK";
+// import { Room } from "../../../common/tables/Room";
+// import { Guest } from "../../../common/tables/Guest";
 
 import { DatabaseService } from "../services/database.service";
 import Types from "../types";
@@ -21,7 +21,8 @@ export class DatabaseController {
 
     // ======= BIRD SPECIES ROUTES =======
     // ex http://localhost:3000/database/hotel?scientificName=3&name=LeGrandHotel&city=laval
-    router.get("/birdspecies", (req: Request, res: Response, _: NextFunction) => {
+    router.get("/birdSpecies", (req: Request, res: Response, _: NextFunction) => {
+      console.log("A recu la requete http")
       var scientificName = req.params.scientificName ? req.params.scientificName : "";
       var commonName = req.params.commonName ? req.params.commonName : "";
       var status = req.params.status ? req.params.status : "";
@@ -30,6 +31,7 @@ export class DatabaseController {
       this.databaseService
         .filterSpecies(scientificName, commonName, status, predator)
         .then((result: pg.QueryResult) => {
+          console.log("A recu ca comme result dans controller:", result.rows);
           const species: Especeoiseau[] = result.rows.map((espece: Especeoiseau) => ({
             nomscientifique: espece.nomscientifique,
             nomcommun: espece.nomcommun,
@@ -43,237 +45,237 @@ export class DatabaseController {
         });
     });
 
-    router.get(
-      "/birdspecies/scientificName",
-      (req: Request, res: Response, _: NextFunction) => {
-        this.databaseService
-          .getcommonNamesByNos()
-          .then((result: pg.QueryResult) => {
-            const hotelsNbsNames = result.rows.map((hotel: HotelPK) => ({
-              scientificName: hotel.scientificName,
-              name: hotel.name,
-            }));
-            res.json(hotelsNbsNames);
-          })
+    // router.get(
+    //   "/birdspecies/scientificName",
+    //   (req: Request, res: Response, _: NextFunction) => {
+    //     this.databaseService
+    //       .getcommonNamesByNos()
+    //       .then((result: pg.QueryResult) => {
+    //         const hotelsNbsNames = result.rows.map((hotel: HotelPK) => ({
+    //           scientificName: hotel.scientificName,
+    //           name: hotel.name,
+    //         }));
+    //         res.json(hotelsNbsNames);
+    //       })
 
-          .catch((e: Error) => {
-            console.error(e.stack);
-          });
-      }
-    );
+    //       .catch((e: Error) => {
+    //         console.error(e.stack);
+    //       });
+    //   }
+    // );
 
-    router.post(
-      "/birdspecies/insert",
-      (req: Request, res: Response, _: NextFunction) => {
-        const hotel: Hotel = {
-          scientificName: req.body.scientificName,
-          name: req.body.name,
-          city: req.body.city,
-        };
+    // router.post(
+    //   "/birdspecies/insert",
+    //   (req: Request, res: Response, _: NextFunction) => {
+    //     const hotel: Hotel = {
+    //       scientificName: req.body.scientificName,
+    //       name: req.body.name,
+    //       city: req.body.city,
+    //     };
 
-        this.databaseService
-          .createHotel(hotel)
-          .then((result: pg.QueryResult) => {
-            res.json(result.rowCount);
-          })
-          .catch((e: Error) => {
-            console.error(e.stack);
-            res.json(-1);
-          });
-      }
-    );
+    //     this.databaseService
+    //       .createHotel(hotel)
+    //       .then((result: pg.QueryResult) => {
+    //         res.json(result.rowCount);
+    //       })
+    //       .catch((e: Error) => {
+    //         console.error(e.stack);
+    //         res.json(-1);
+    //       });
+    //   }
+    // );
 
-    router.post(
-      "/birdspecies/delete/:scientificName",
-      (req: Request, res: Response, _: NextFunction) => {
-        const scientificName: string = req.params.scientificName;
-        this.databaseService
-          .deleteHotel(scientificName)
-          .then((result: pg.QueryResult) => {
-            res.json(result.rowCount);
-          })
-          .catch((e: Error) => {
-            console.error(e.stack);
-          });
-      }
-    );
+    // router.post(
+    //   "/birdspecies/delete/:scientificName",
+    //   (req: Request, res: Response, _: NextFunction) => {
+    //     const scientificName: string = req.params.scientificName;
+    //     this.databaseService
+    //       .deleteHotel(scientificName)
+    //       .then((result: pg.QueryResult) => {
+    //         res.json(result.rowCount);
+    //       })
+    //       .catch((e: Error) => {
+    //         console.error(e.stack);
+    //       });
+    //   }
+    // );
 
-    router.put(
-      "/birdspecies/update",
-      (req: Request, res: Response, _: NextFunction) => {
-        const hotel: Hotel = {
-          scientificName: req.body.scientificName,
-          name: req.body.name ? req.body.name : "",
-          city: req.body.city ? req.body.city : "",
-        };
+    // router.put(
+    //   "/birdspecies/update",
+    //   (req: Request, res: Response, _: NextFunction) => {
+    //     const hotel: Hotel = {
+    //       scientificName: req.body.scientificName,
+    //       name: req.body.name ? req.body.name : "",
+    //       city: req.body.city ? req.body.city : "",
+    //     };
 
-        this.databaseService
-          .updateHotel(hotel)
-          .then((result: pg.QueryResult) => {
-            res.json(result.rowCount);
-          })
-          .catch((e: Error) => {
-            console.error(e.stack);
-          });
-      }
-    );
+    //     this.databaseService
+    //       .updateHotel(hotel)
+    //       .then((result: pg.QueryResult) => {
+    //         res.json(result.rowCount);
+    //       })
+    //       .catch((e: Error) => {
+    //         console.error(e.stack);
+    //       });
+    //   }
+    // );
 
-    // ======= ROOMS ROUTES =======
-    router.get("/add", (req: Request, res: Response, _: NextFunction) => {
-      const scientificName = req.query.scientificName ? req.query.scientificName : "";
-      const roomNb = req.query.roomNb ? req.query.roomNb : "";
-      const roomType = req.query.type ? req.query.type : "";
-      const roomPrice = req.query.price
-        ? parseFloat(req.query.price as string)
-        : -1;
+    // // ======= ROOMS ROUTES =======
+    // router.get("/add", (req: Request, res: Response, _: NextFunction) => {
+    //   const scientificName = req.query.scientificName ? req.query.scientificName : "";
+    //   const roomNb = req.query.roomNb ? req.query.roomNb : "";
+    //   const roomType = req.query.type ? req.query.type : "";
+    //   const roomPrice = req.query.price
+    //     ? parseFloat(req.query.price as string)
+    //     : -1;
 
-      this.databaseService
-        .filterRooms(
-          scientificName as string,
-          roomNb as string,
-          roomType as string,
-          roomPrice
-        )
-        .then((result: pg.QueryResult) => {
-          const rooms: Room[] = result.rows.map((room: Room) => ({
-            scientificName: room.scientificName,
-            roomnb: room.roomnb,
-            type: room.type,
-            price: parseFloat(room.price.toString()),
-          }));
+    //   this.databaseService
+    //     .filterRooms(
+    //       scientificName as string,
+    //       roomNb as string,
+    //       roomType as string,
+    //       roomPrice
+    //     )
+    //     .then((result: pg.QueryResult) => {
+    //       const rooms: Room[] = result.rows.map((room: Room) => ({
+    //         scientificName: room.scientificName,
+    //         roomnb: room.roomnb,
+    //         type: room.type,
+    //         price: parseFloat(room.price.toString()),
+    //       }));
 
-          res.json(rooms);
-        })
-        .catch((e: Error) => {
-          console.error(e.stack);
-        });
-    });
+    //       res.json(rooms);
+    //     })
+    //     .catch((e: Error) => {
+    //       console.error(e.stack);
+    //     });
+    // });
 
-    router.post(
-      "/add/insert",
-      (req: Request, res: Response, _: NextFunction) => {
-        const room: Room = {
-          scientificName: req.body.scientificName,
-          roomnb: req.body.roomnb,
-          type: req.body.type,
-          price: parseFloat(req.body.price),
-        };
+    // router.post(
+    //   "/add/insert",
+    //   (req: Request, res: Response, _: NextFunction) => {
+    //     const room: Room = {
+    //       scientificName: req.body.scientificName,
+    //       roomnb: req.body.roomnb,
+    //       type: req.body.type,
+    //       price: parseFloat(req.body.price),
+    //     };
 
-        this.databaseService
-          .createRoom(room)
-          .then((result: pg.QueryResult) => {
-            res.json(result.rowCount);
-          })
-          .catch((e: Error) => {
-            console.error(e.stack);
-            res.json(-1);
-          });
-      }
-    );
+    //     this.databaseService
+    //       .createRoom(room)
+    //       .then((result: pg.QueryResult) => {
+    //         res.json(result.rowCount);
+    //       })
+    //       .catch((e: Error) => {
+    //         console.error(e.stack);
+    //         res.json(-1);
+    //       });
+    //   }
+    // );
 
-    router.put(
-      "/add/update",
-      (req: Request, res: Response, _: NextFunction) => {
-        const room: Room = {
-          scientificName: req.body.scientificName,
-          roomnb: req.body.roomnb,
-          type: req.body.type,
-          price: parseFloat(req.body.price),
-        };
+    // router.put(
+    //   "/add/update",
+    //   (req: Request, res: Response, _: NextFunction) => {
+    //     const room: Room = {
+    //       scientificName: req.body.scientificName,
+    //       roomnb: req.body.roomnb,
+    //       type: req.body.type,
+    //       price: parseFloat(req.body.price),
+    //     };
 
-        this.databaseService
-          .updateRoom(room)
-          .then((result: pg.QueryResult) => {
-            res.json(result.rowCount);
-          })
-          .catch((e: Error) => {
-            console.error(e.stack);
-            res.json(-1);
-          });
-      }
-    );
+    //     this.databaseService
+    //       .updateRoom(room)
+    //       .then((result: pg.QueryResult) => {
+    //         res.json(result.rowCount);
+    //       })
+    //       .catch((e: Error) => {
+    //         console.error(e.stack);
+    //         res.json(-1);
+    //       });
+    //   }
+    // );
 
-    router.post(
-      "/add/delete/:scientificName/:roomNb",
-      (req: Request, res: Response, _: NextFunction) => {
-        const scientificName: string = req.params.scientificName;
-        const roomNb: string = req.params.roomNb;
+    // router.post(
+    //   "/add/delete/:scientificName/:roomNb",
+    //   (req: Request, res: Response, _: NextFunction) => {
+    //     const scientificName: string = req.params.scientificName;
+    //     const roomNb: string = req.params.roomNb;
 
-        this.databaseService
-          .deleteRoom(scientificName, roomNb)
-          .then((result: pg.QueryResult) => {
-            res.json(result.rowCount);
-          })
-          .catch((e: Error) => {
-            console.error(e.stack);
-            res.json(-1);
-          });
-      }
-    );
+    //     this.databaseService
+    //       .deleteRoom(scientificName, roomNb)
+    //       .then((result: pg.QueryResult) => {
+    //         res.json(result.rowCount);
+    //       })
+    //       .catch((e: Error) => {
+    //         console.error(e.stack);
+    //         res.json(-1);
+    //       });
+    //   }
+    // );
 
-    // ======= GUEST ROUTES =======
-    router.post(
-      "/edit/insert",
-      (req: Request, res: Response, _: NextFunction) => {
-        const guest: Guest = {
-          guestnb: req.body.guestnb,
-          nas: req.body.nas,
-          name: req.body.name,
-          gender: req.body.gender,
-          city: req.body.city,
-        };
+    // // ======= GUEST ROUTES =======
+    // router.post(
+    //   "/edit/insert",
+    //   (req: Request, res: Response, _: NextFunction) => {
+    //     const guest: Guest = {
+    //       guestnb: req.body.guestnb,
+    //       nas: req.body.nas,
+    //       name: req.body.name,
+    //       gender: req.body.gender,
+    //       city: req.body.city,
+    //     };
 
-        this.databaseService
-          .createGuest(guest)
-          .then((result: pg.QueryResult) => {
-            res.json(result.rowCount);
-          })
-          .catch((e: Error) => {
-            console.error(e.stack);
-            res.json(-1);
-          });
-      }
-    );
+    //     this.databaseService
+    //       .createGuest(guest)
+    //       .then((result: pg.QueryResult) => {
+    //         res.json(result.rowCount);
+    //       })
+    //       .catch((e: Error) => {
+    //         console.error(e.stack);
+    //         res.json(-1);
+    //       });
+    //   }
+    // );
 
-    router.get(
-      "/edit/:scientificName/:roomNb",
-      (req: Request, res: Response, _: NextFunction) => {
-        const scientificName: string = req.params.scientificName;
-        const roomNb: string = req.params.roomNb;
+    // router.get(
+    //   "/edit/:scientificName/:roomNb",
+    //   (req: Request, res: Response, _: NextFunction) => {
+    //     const scientificName: string = req.params.scientificName;
+    //     const roomNb: string = req.params.roomNb;
 
-        this.databaseService
-          .getGuests(scientificName, roomNb)
-          .then((result: pg.QueryResult) => {
-            const guests: Guest[] = result.rows.map((guest: any) => ({
-              guestnb: guest.guestnb,
-              nas: guest.nas,
-              name: guest.name,
-              gender: guest.gender,
-              city: guest.city,
-            }));
-            res.json(guests);
-          })
-          .catch((e: Error) => {
-            console.error(e.stack);
-            res.json(-1);
-          });
-      }
-    );
+    //     this.databaseService
+    //       .getGuests(scientificName, roomNb)
+    //       .then((result: pg.QueryResult) => {
+    //         const guests: Guest[] = result.rows.map((guest: any) => ({
+    //           guestnb: guest.guestnb,
+    //           nas: guest.nas,
+    //           name: guest.name,
+    //           gender: guest.gender,
+    //           city: guest.city,
+    //         }));
+    //         res.json(guests);
+    //       })
+    //       .catch((e: Error) => {
+    //         console.error(e.stack);
+    //         res.json(-1);
+    //       });
+    //   }
+    // );
 
-    // ======= GENERAL ROUTES =======
-    router.get(
-      "/tables/:tableName",
-      (req: Request, res: Response, next: NextFunction) => {
-        this.databaseService
-          .getAllFromTable(req.params.tableName)
-          .then((result: pg.QueryResult) => {
-            res.json(result.rows);
-          })
-          .catch((e: Error) => {
-            console.error(e.stack);
-          });
-      }
-    );
+    // // ======= GENERAL ROUTES =======
+    // router.get(
+    //   "/tables/:tableName",
+    //   (req: Request, res: Response, next: NextFunction) => {
+    //     this.databaseService
+    //       .getAllFromTable(req.params.tableName)
+    //       .then((result: pg.QueryResult) => {
+    //         res.json(result.rows);
+    //       })
+    //       .catch((e: Error) => {
+    //         console.error(e.stack);
+    //       });
+    //   }
+    // );
 
     return router;
   }

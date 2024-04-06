@@ -1,7 +1,7 @@
-DROP SCHEMA IF EXISTS ornithologue_bd CASCADE;
+DROP SCHEMA IF EXISTS ornithologue_db CASCADE;
 
-CREATE SCHEMA ornithologue_bd;
-SET search_path = ornithologue_bd;
+CREATE SCHEMA ornithologue_db;
+SET search_path = ornithologue_db;
 
 
 CREATE TABLE Observateur (

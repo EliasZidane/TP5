@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
+import { Component} from "@angular/core";
 import { Especeoiseau } from "../../../../common/tables/Especeoiseau";
 import { CommunicationService } from "../communication.service";
 
@@ -8,9 +8,9 @@ import { CommunicationService } from "../communication.service";
   styleUrls: ["./bird-species.component.css"],
 })
 export class BirdSpeciesComponent {
-  @ViewChild("newHotelNb") newHotelNb: ElementRef;
-  @ViewChild("newHotelName") newHotelName: ElementRef;
-  @ViewChild("newHotelCity") newHotelCity: ElementRef;
+  // @ViewChild("newHotelNb") newHotelNb: ElementRef;
+  // @ViewChild("newHotelName") newHotelName: ElementRef;
+  // @ViewChild("newHotelCity") newHotelCity: ElementRef;
 
   public species: Especeoiseau[] = [];
   public duplicateError: boolean = false;
@@ -22,34 +22,35 @@ export class BirdSpeciesComponent {
   }
 
   public getSpecies(): void {
+    console.log("dans getSpecies component")
     this.communicationService.getSpecies().subscribe((species: Especeoiseau[]) => {
       this.species = species;
     });
   }
 
-  public insertHotel(): void {
-    const hotel: any = {
-      hotelnb: this.newHotelNb.nativeElement.innerText,
-      name: this.newHotelName.nativeElement.innerText,
-      city: this.newHotelCity.nativeElement.innerText,
+  // public insertHotel(): void {
+  //   const hotel: any = {
+  //     hotelnb: this.newHotelNb.nativeElement.innerText,
+  //     name: this.newHotelName.nativeElement.innerText,
+  //     city: this.newHotelCity.nativeElement.innerText,
 
-    };
+  //   };
 
-    this.communicationService.insertHotel(hotel).subscribe((res: number) => {
-      if (res > 0) {
-        this.communicationService.filter("update");
-      }
-      this.refresh();
-      this.duplicateError = res === -1;
-    });
-  }
+  //   this.communicationService.insertHotel(hotel).subscribe((res: number) => {
+  //     if (res > 0) {
+  //       this.communicationService.filter("update");
+  //     }
+  //     this.refresh();
+  //     this.duplicateError = res === -1;
+  //   });
+  // }
 
-  private refresh() {
-    this.getSpecies();
-    this.newHotelNb.nativeElement.innerText = "";
-    this.newHotelName.nativeElement.innerText = "";
-    this.newHotelCity.nativeElement.innerText = "";
-  }
+  // private refresh() {
+    // this.getSpecies();
+    // this.newHotelNb.nativeElement.innerText = "";
+    // this.newHotelName.nativeElement.innerText = "";
+    // this.newHotelCity.nativeElement.innerText = "";
+  // }
 
   // public deleteHotel(hotelNb: string) {
   //   this.communicationService.deleteHotel(hotelNb).subscribe((res: any) => {
