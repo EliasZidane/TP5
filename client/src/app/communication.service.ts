@@ -21,35 +21,35 @@ export class CommunicationService {
   }
 
   public getSpecies(): Observable<Especeoiseau[]> {
-    console.log("dans getSpecies communication Service")
     return this.http
       .get<Especeoiseau[]>(this.BASE_URL + "/birdSpecies")
       .pipe(catchError(this.handleError<Especeoiseau[]>("getSpecies")));
   }
 
-  public insertHotel(hotel: Especeoiseau): Observable<number> {
-    return this.http
-      .post<number>(this.BASE_URL + "/hotels/insert", hotel)
-      .pipe(catchError(this.handleError<number>("insertHotel")));
-  }
+  // public insertHotel(hotel: Especeoiseau): Observable<number> {
+  //   return this.http
+  //     .post<number>(this.BASE_URL + "/hotels/insert", hotel)
+  //     .pipe(catchError(this.handleError<number>("insertHotel")));
+  // }
 
-  public updateHotel(hotel: Especeoiseau): Observable<number> {
+  public updateSpecie(specie: Especeoiseau): Observable<number> {
+    console.log("Va update avec : ",specie.nomscientifique);
     return this.http
-      .put<number>(this.BASE_URL + "/hotels/update", hotel)
+      .put<number>(this.BASE_URL + `/edit/${specie.nomscientifique}`, specie)
       .pipe(catchError(this.handleError<number>("updateHotel")));
   }
 
-  public deleteHotel(hotelNb: string): Observable<number> {
-    return this.http
-      .post<number>(this.BASE_URL + "/hotels/delete/" + hotelNb, {})
-      .pipe(catchError(this.handleError<number>("deleteHotel")));
-  }
-
-  // public getHotelPKs(): Observable<HotelPK[]> {
+  // public deleteHotel(hotelNb: string): Observable<number> {
   //   return this.http
-  //     .get<HotelPK[]>(this.BASE_URL + "/hotels/hotelNb")
-  //     .pipe(catchError(this.handleError<HotelPK[]>("getHotelPKs")));
+  //     .post<number>(this.BASE_URL + "/hotels/delete/" + hotelNb, {})
+  //     .pipe(catchError(this.handleError<number>("deleteHotel")));
   // }
+
+  public getSpecie(scientificName: string): Observable<Especeoiseau> {
+    return this.http
+      .get<Especeoiseau>(this.BASE_URL + `/edit/${scientificName}`)
+      .pipe(catchError(this.handleError<Especeoiseau>("getSpecie")));
+  }
 
   // public getRooms(hotelNb: string): Observable<Room[]> {
   //   return this.http

@@ -22,7 +22,6 @@ export class DatabaseController {
     // ======= BIRD SPECIES ROUTES =======
     // ex http://localhost:3000/database/hotel?scientificName=3&name=LeGrandHotel&city=laval
     router.get("/birdSpecies", (req: Request, res: Response, _: NextFunction) => {
-      console.log("A recu la requete http")
       var scientificName = req.params.scientificName ? req.params.scientificName : "";
       var commonName = req.params.commonName ? req.params.commonName : "";
       var status = req.params.status ? req.params.status : "";
@@ -31,7 +30,6 @@ export class DatabaseController {
       this.databaseService
         .filterSpecies(scientificName, commonName, status, predator)
         .then((result: pg.QueryResult) => {
-          console.log("A recu ca comme result dans controller:", result.rows);
           const species: Especeoiseau[] = result.rows.map((espece: Especeoiseau) => ({
             nomscientifique: espece.nomscientifique,
             nomcommun: espece.nomcommun,
@@ -45,24 +43,21 @@ export class DatabaseController {
         });
     });
 
-    // router.get(
-    //   "/birdspecies/scientificName",
-    //   (req: Request, res: Response, _: NextFunction) => {
-    //     this.databaseService
-    //       .getcommonNamesByNos()
-    //       .then((result: pg.QueryResult) => {
-    //         const hotelsNbsNames = result.rows.map((hotel: HotelPK) => ({
-    //           scientificName: hotel.scientificName,
-    //           name: hotel.name,
-    //         }));
-    //         res.json(hotelsNbsNames);
-    //       })
+    router.get(
+      "/edit/:scientificName",
+      (req: Request, res: Response, _: NextFunction) => {
+        var scientificName = req.params.scientificName ? req.params.scientificName : "";
+        this.databaseService
+          .getSpecieByName(scientificName)
+          .then((result: pg.QueryResult) => {
+            res.json(result.rows[0]);
+          })
 
-    //       .catch((e: Error) => {
-    //         console.error(e.stack);
-    //       });
-    //   }
-    // );
+          .catch((e: Error) => {
+            console.error(e.stack);
+          });
+      }
+    );
 
     // router.post(
     //   "/birdspecies/insert",
@@ -100,25 +95,27 @@ export class DatabaseController {
     //   }
     // );
 
-    // router.put(
-    //   "/birdspecies/update",
-    //   (req: Request, res: Response, _: NextFunction) => {
-    //     const hotel: Hotel = {
-    //       scientificName: req.body.scientificName,
-    //       name: req.body.name ? req.body.name : "",
-    //       city: req.body.city ? req.body.city : "",
-    //     };
+    router.put(
+      "/edit/:nomscientifique",
+      (req: Request, res: Response, _: NextFunction) => {
+        console.log(req.body)
+        const specie: Especeoiseau = {
+          nomscientifique: req.body.nomscientifique,
+            nomcommun: req.body.nomcommun,
+            statutspeces: req.body.statutspeces,
+            nomscientifiquecomsommer: req.body.nomscientifiquecomsommer,
+        };
 
-    //     this.databaseService
-    //       .updateHotel(hotel)
-    //       .then((result: pg.QueryResult) => {
-    //         res.json(result.rowCount);
-    //       })
-    //       .catch((e: Error) => {
-    //         console.error(e.stack);
-    //       });
-    //   }
-    // );
+        this.databaseService
+          .updateSpecie(specie)
+          .then((result: pg.QueryResult) => {
+            res.json(result.rowCount);
+          })
+          .catch((e: Error) => {
+            console.error(e.stack);
+          });
+      }
+    );
 
     // // ======= ROOMS ROUTES =======
     // router.get("/add", (req: Request, res: Response, _: NextFunction) => {

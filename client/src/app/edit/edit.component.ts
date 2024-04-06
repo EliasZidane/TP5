@@ -1,8 +1,10 @@
 import { Component, OnInit } from "@angular/core";
+import { Especeoiseau } from "../../../../common/tables/Especeoiseau";
+import { ActivatedRoute } from '@angular/router';
 // import { HotelPK } from "../../../../common/tables/HotelPK";
 // import { Room } from "../../../../common/tables/Room";
 // import { Guest } from "../../../../common/tables/Guest";
-// import { CommunicationService } from "../communication.service";
+import { CommunicationService } from "../communication.service";
 
 @Component({
   selector: "app-room",
@@ -12,9 +14,15 @@ import { Component, OnInit } from "@angular/core";
 export class EditComponent implements OnInit {
   // public rooms: Room[] = [];
   // public guests: Guest[] = [];
-
+  public specie: Especeoiseau = {
+    nomscientifique: "",
+    nomcommun: "",
+    statutspeces: "",
+    nomscientifiquecomsommer: "",
+  
+  };
   public duplicateError: boolean = false;
-  public invalidHotelPK: boolean = false;
+  public invalidSpeciePK: boolean = false;
 
   // public selectedHotel: HotelPK = {
   //   hotelnb: "-1",
@@ -27,21 +35,48 @@ export class EditComponent implements OnInit {
   //   type: "",
   //   price: 0
   // }
-
-  // public constructor(private communicationService: CommunicationService) {}
-
-  public ngOnInit(): void {
-    // this.communicationService.getHotelPKs().subscribe((hotelPKs: HotelPK[]) => {
-    //   this.hotelPKs = hotelPKs;
-    //   this.selectedHotel = this.hotelPKs[0];
-    //   this.getRooms();
-    // });
+  constructor(private route: ActivatedRoute, private communicationService: CommunicationService) {
   }
 
-  public updateSelectedHotel(hotelID: any) {
-    // this.selectedHotel = this.hotelPKs[hotelID];
-    // this.getRooms();
-    // this.refresh();
+  public ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      const scientificName = params.get('nomscientifique');
+      if (scientificName) {
+        this.communicationService.getSpecie(scientificName).subscribe((specie: Especeoiseau) => {
+          this.specie = specie;
+        });
+      }
+    });
+  }
+  
+  public changeSpecieCommonName(event: any, specie: Especeoiseau){
+    const editField = event.target.textContent;
+    specie.nomcommun = editField;
+  }
+  public changeSpecieStatus(event: any, specie: Especeoiseau){
+    const editField = event.target.textContent;
+    specie.statutspeces = editField;
+  }
+  public changeSpeciePredator(event: any, specie: Especeoiseau){
+    const editField = event.target.textContent;
+    specie.nomscientifiquecomsommer = editField;
+  }
+  
+
+  public updateSpecie(specie: Especeoiseau)  {
+    if (specie.nomscientifiquecomsommer === "") {
+      specie.nomscientifiquecomsommer = null;
+    }
+    this.communicationService.updateSpecie(specie).subscribe((result: number) => {
+      if (result === 0) {
+        this.duplicateError = true;
+      } else {
+        this.duplicateError = false;
+        // this.selectedHotel = hotel;
+        // this.getRooms();
+      }
+    });
+
   }
 
   public updateSelectedRoom(roomID: any) {

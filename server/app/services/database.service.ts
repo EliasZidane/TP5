@@ -1,6 +1,7 @@
 import { injectable } from "inversify";
 import * as pg from "pg";
 import "reflect-metadata";
+import { Especeoiseau } from "../../../common/tables/Especeoiseau";
 // import { Room } from "../../../common/tables/Room";
 // import { Hotel } from "../../../common/tables/Hotel";
 // import { Gender, Guest } from "../../../common/tables/Guest";
@@ -9,9 +10,9 @@ import "reflect-metadata";
 export class DatabaseService {
   // TODO: A MODIFIER POUR VOTRE BD
   public connectionConfig: pg.ConnectionConfig = {
-    user: "postgres",
+    user: "elias",
     database: "ornithologue_db",
-    password: "elias",
+    password: "zidane",
     port: 5432,
     host: "127.0.0.1",
     keepAlive: true,
@@ -45,7 +46,6 @@ export class DatabaseService {
   public async filterSpecies(
     scientificName: string, commonName: string, status: string, predator: string
   ): Promise<pg.QueryResult> {
-    console.log("dans filterSpecies db service")
     const client = await this.pool.connect();
 
     const searchTerms: string[] = [];
@@ -65,36 +65,46 @@ export class DatabaseService {
   }
 
   // get the hotel names and numbers so so that the user can only select an existing hotel
-  // public async getcommonNamesByNos(): Promise<pg.QueryResult> {
-  //   const client = await this.pool.connect();
-  //   const res = await client.query("SELECT scientificName, name FROM ornithologue_db.Hotel;");
-  //   client.release();
-  //   return res;
-  // }
+  public async getSpecieByName(scientificName: string): Promise<pg.QueryResult> {
+    const client = await this.pool.connect();
+    const res = await client.query("SELECT nomscientifique, nomcommun, statutspeces, nomscientifiquecomsommer FROM ornithologue_db.especeoiseau WHERE nomscientifique = $1;", [scientificName]);
+    client.release();
+    return res;
+  }
 
-  // // modify name or status of a hotel
-  // public async updateHotel(hotel: Hotel): Promise<pg.QueryResult> {
-  //   const client = await this.pool.connect();
 
-  //   let toUpdateValues = [];
 
-  //   if (hotel.name.length > 0) toUpdateValues.push(`name = '${hotel.name}'`);
-  //   if (hotel.status.length > 0) toUpdateValues.push(`status = '${hotel.status}'`);
 
-  //   if (
-  //     !hotel.scientificName ||
-  //     hotel.scientificName.length === 0 ||
-  //     toUpdateValues.length === 0
-  //   )
-  //     throw new Error("Invalid hotel update query");
+  public async updateSpecie(specie: Especeoiseau): Promise<pg.QueryResult> {
+    const client = await this.pool.connect();
+    try {
+    let toUpdateValues: string[] = [];
 
-  //   const query = `UPDATE ornithologue_db.Hotel SET ${toUpdateValues.join(
-  //     ", "
-  //   )} WHERE scientificName = '${hotel.scientificName}';`;
-  //   const res = await client.query(query);
-  //   client.release();
-  //   return res;
-  // }
+    if (specie.nomscientifique.length > 0) toUpdateValues.push(`nomscientifique = '${specie.nomscientifique}'`);
+    if (specie.nomcommun && specie.nomcommun.length > 0) toUpdateValues.push(`nomcommun = '${specie.nomcommun}'`);
+    if (specie.statutspeces && specie.statutspeces.length > 0) toUpdateValues.push(`statutspeces = '${specie.statutspeces}'`);
+    if (specie.nomscientifiquecomsommer && specie.nomscientifiquecomsommer.length > 0) toUpdateValues.push(`nomscientifiquecomsommer = '${specie.nomscientifiquecomsommer}'`);
+
+    // if (
+    //   !specie.nomscientifique ||
+    //   specie.nomscientifique.length === 0 ||
+    //   toUpdateValues.length === 0
+    // )
+    //   throw new Error("Invalid specie update query");
+      // const { nomscientifique, ...updatedData } = specie;
+      const query = `UPDATE ornithologue_db.especeoiseau SET ${toUpdateValues.join(
+        ", "
+      )} WHERE nomscientifique = '${specie.nomscientifique}';
+      `;
+      const result = await client.query(query);
+      if (result.rowCount === 0) {
+        throw new Error(`Specie ${specie.nomscientifique} not found`);
+      }
+      return result;
+    } catch (error) {
+      throw new Error(`Error updating Specie: ${error}`);
+    }
+  }
 
   // public async deleteHotel(scientificName: string): Promise<pg.QueryResult> {
   //   if (scientificName.length === 0) throw new Error("Invalid delete query");

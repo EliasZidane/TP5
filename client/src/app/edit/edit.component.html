@@ -1,9 +1,9 @@
-<!-- <div id="guest">
-  <h1>Guests</h1>
+<div id="guest">
+  <h1>{{specie.nomscientifique}}</h1>
 
   <div class="divider"></div>
 
-  <div class="container contentSelect">
+  <!-- <div class="container contentSelect">
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <label class="input-group-text" for="hotelSelect">Hotel</label>
@@ -16,9 +16,9 @@
         <option *ngFor="let hotel of hotelPKs">{{ hotel.name }}</option>
       </select>
     </div>
-  </div>
+  </div> -->
 
-  <div class="container contentSelect">
+  <!-- <div class="container contentSelect">
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <label class="input-group-text" for="roomSelect">Room</label>
@@ -31,24 +31,23 @@
         <option *ngFor="let room of rooms">{{ room.roomnb }}</option>
       </select>
     </div>
-  </div>
+  </div> -->
 
   <table id="ht" align="center" border="1" width="1000" class="table-striped table-hover">
     <thead class="header">
-      <th class="contentCell">GUEST NUMBER</th>
-      <th class="contentCell">NAS</th>
-      <th class="contentCell">NAME</th>
-      <th class="contentCell">GENDER</th>
-      <th class="contentCell">CITY</th>
+      <th class="contentCell">Nom Scientifique</th>
+      <th class="contentCell">Nom commun</th>
+      <th class="contentCell">Statut</th>
+      <th class="contentCell">Prédateur</th>
     </thead>
     <tbody>
-      <tr *ngFor="let guest of guests">
-        <td class="contentCell">{{ guest.guestnb }}</td>
-        <td class="contentCell">{{ guest.nas }}</td>
-        <td class="contentCell">{{ guest.name }}</td>
-        <td class="contentCell">{{ guest.gender }}</td>
-        <td class="contentCell">{{ guest.city }}</td>
+      <tr>
+        <td class="contentCell">{{ specie.nomscientifique }}</td>
+        <td class="contentCell" contenteditable="true" (blur)="changeSpecieCommonName($event, specie)">{{ specie.nomcommun }}</td>
+        <td class="contentCell" contenteditable="true" (blur)="changeSpecieStatus($event, specie)">{{ specie.statutspeces}}</td>
+        <td class="contentCell" contenteditable="true" (blur)="changeSpeciePredator($event, specie)">{{ specie.nomscientifiquecomsommer }}</td>
       </tr>
     </tbody>
   </table>
-</div> -->
+  <button type="button" class="btn" (click)="updateSpecie(specie)">Soumettre modifications</button>
+</div>

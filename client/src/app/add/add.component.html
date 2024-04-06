@@ -35,7 +35,7 @@
         <td class="contentCell" contenteditable="true" (blur)="changeRoomType($event, i)">{{ room.type }}</td>
         <td class="contentCell" contenteditable="true" (blur)="changeRoomPrice($event, i)">{{ room.price }}</td>
         <td class="actionCell">
-          <button type="button" class="submitbtn" (click)="updateRoom(i)"> <i class="fa fa-edit"></i></button>
+          <button type="button" class="editbtn" (click)="updateRoom(i)"> <i class="fa fa-edit"></i></button>
           <button type="button" class="deletebtn" (click)="deleteRoom(room.hotelnb, room.roomnb)">
             <i class="fa fa-trash-o"></i>
           </button>

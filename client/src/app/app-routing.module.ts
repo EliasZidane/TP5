@@ -5,12 +5,14 @@ import { HomeComponent } from "./app.component";
 import { BirdSpeciesComponent } from "./bird-species/bird-species.component";
 import { AddComponent } from "./add/add.component";
 import { EditComponent } from "./edit/edit.component";
+// import { DeleteComponent } from "./delete/delete.component";
 
 const routes: Routes = [
   { path: "app", component: HomeComponent },
   { path: "add", component: AddComponent },
   { path: "birdSpecies", component: BirdSpeciesComponent },
-  { path: "edit", component: EditComponent },
+  { path: "edit/:nomscientifique", component: EditComponent },
+  // { path: "delete/:nomscientifique", component: DeleteComponent },
 ];
 
 @NgModule({

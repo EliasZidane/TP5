@@ -1,6 +1,7 @@
 import { Component} from "@angular/core";
 import { Especeoiseau } from "../../../../common/tables/Especeoiseau";
 import { CommunicationService } from "../communication.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-hotel",
@@ -15,17 +16,27 @@ export class BirdSpeciesComponent {
   public species: Especeoiseau[] = [];
   public duplicateError: boolean = false;
 
-  public constructor(private communicationService: CommunicationService) {}
+  public constructor(private communicationService: CommunicationService, 
+    private router: Router
+  ) {}
 
   public ngOnInit(): void {
     this.getSpecies();
   }
 
   public getSpecies(): void {
-    console.log("dans getSpecies component")
     this.communicationService.getSpecies().subscribe((species: Especeoiseau[]) => {
       this.species = species;
     });
+  }
+
+  public deleteBird(scientificName: string) {
+    this.router.navigate(["/delete", scientificName]);
+  }
+  public editBird(scientificName: string) {
+    console.log("editBird", scientificName);
+    this.router.navigate([`/edit/${scientificName}`]);
+
   }
 
   // public insertHotel(): void {
