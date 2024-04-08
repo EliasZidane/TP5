@@ -1,56 +1,53 @@
-<!-- <div id="room">
-  <h1>Rooms</h1>
+<div id="guest">
+  <h1>Add a new specie</h1>
 
   <div class="divider"></div>
 
-  <div class="container contentSelect">
+  <!-- <div class="container contentSelect">
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <label class="input-group-text" for="hotelSelect">Hotel</label>
       </div>
-      <select class="custom-select" id="hotelSelect" (change)="updateSelectedHotel($event.target.options.selectedIndex)">
+      <select
+        class="custom-select"
+        id="hotelSelect"
+        (change)="updateSelectedHotel($event.target.options.selectedIndex)"
+      >
         <option *ngFor="let hotel of hotelPKs">{{ hotel.name }}</option>
       </select>
     </div>
-  </div>
+  </div> -->
 
-  <table
-    id="ht"
-    align="center"
-    border="1"
-    width="1000"
-    class="table-striped table-hover"
-  >
-    <thead class="roomsheader">
-      <th class="contentCell">HOTEL NUMBER</th>
-      <th class="contentCell">ROOM NUMBER</th>
-      <th class="contentCell">ROOM TYPE</th>
-      <th class="contentCell">ROOM PRICE</th>
-      <th class="actionCell">ACTION</th>
+  <!-- <div class="container contentSelect">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="roomSelect">Room</label>
+      </div>
+      <select
+        class="custom-select"
+        id="roomSelect"
+        (change)="updateSelectedRoom($event.target.options.selectedIndex)"
+      >
+        <option *ngFor="let room of rooms">{{ room.roomnb }}</option>
+      </select>
+    </div>
+  </div> -->
+
+  <table id="ht" align="center" border="1" width="1000" class="table-striped table-hover">
+    <thead class="header">
+      <th class="contentCell">Nom Scientifique</th>
+      <th class="contentCell">Nom commun</th>
+      <th class="contentCell">Statut</th>
+      <th class="contentCell">Prédateur</th>
     </thead>
     <tbody>
-      <tr *ngFor="let room of rooms; let i = index">
-        <td class="contentCell">{{ room.hotelnb }}</td>
-        <td class="contentCell">{{ room.roomnb }}</td>
-        <td class="contentCell" contenteditable="true" (blur)="changeRoomType($event, i)">{{ room.type }}</td>
-        <td class="contentCell" contenteditable="true" (blur)="changeRoomPrice($event, i)">{{ room.price }}</td>
-        <td class="actionCell">
-          <button type="button" class="editbtn" (click)="updateRoom(i)"> <i class="fa fa-edit"></i></button>
-          <button type="button" class="deletebtn" (click)="deleteRoom(room.hotelnb, room.roomnb)">
-            <i class="fa fa-trash-o"></i>
-          </button>
-        </td>
-      </tr>
-
-      <tr class="blank_row">
-        <td class="contentCell">{{selectedHotel.hotelnb}}</td>
-        <td class="contentCell" contenteditable="true" placeholder="New Number" #newRoomNb></td>
-        <td class="contentCell" contenteditable="true" placeholder="New Type" #newRoomType></td>
-        <td class="contentCell" contenteditable="true" placeholder="New Price" #newRoomPrice></td>
-        <td class="contentCell"></td>
+      <tr>
+        <td class="contentCell" contenteditable="true" (blur)="changeSpecieScientificName($event, specie)">{{ specie.nomscientifique }}</td>
+        <td class="contentCell" contenteditable="true" (blur)="changeSpecieCommonName($event, specie)">{{ specie.nomcommun }}</td>
+        <td class="contentCell" contenteditable="true" (blur)="changeSpecieStatus($event, specie)">{{ specie.statutspeces}}</td>
+        <td class="contentCell" contenteditable="true" (blur)="changeSpeciePredator($event, specie)">{{ specie.nomscientifiquecomsommer }}</td>
       </tr>
     </tbody>
   </table>
-
-  <button type="button" class="btn" (click)="insertRoom()">+</button>
-</div> -->
+  <button type="button" class="btn" (click)="addSpecie(specie)">Soumettre modifications</button>
+</div>

@@ -1,4 +1,4 @@
-#room {
+#guest {
     background-color: var(--theme-background);
     font-family: 'Roboto', sans-serif;
     text-align: center;
@@ -16,7 +16,7 @@
 }
 
 .divider {
-    border-bottom: 1px solid var(--theme-blue);
+    border-bottom: 1px solid var(--theme-lightblue);
     margin: auto;
     width: 50%;
     margin-bottom: 25px;
@@ -24,7 +24,7 @@
 
 .header {
     font-size: 18px;
-    color: var(--theme-blue);
+    color: var(--theme-lightblue);
 }
 
 .contentCell {
@@ -32,23 +32,12 @@
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-    background-color: var(--theme-blue-hover);
-}
-
-.btn {
-    padding-left: 20px;
-    padding-right: 20px;
-    background-color: var(--theme-blue);
-    margin: 20px;
-    color: white;
-    font-size: 25px;
-    font-weight: 800;
-    font-family: 'Varela Round', sans-serif;
+    background-color: var(--theme-lightblue-hover);
 }
 
 [placeholder]:empty::before {
     content: attr(placeholder);
-    color: var(--theme-blue-placeholder); 
+    color: var(--theme-lightblue-placeholder); 
 }
 
 [placeholder]:empty:focus::before {
@@ -56,22 +45,17 @@
 }
 
 .blank_row {
-    color: var(--theme-blue);
+    color: var(--theme-lightblue);
 }
 
 .blank_row:not(.nohover):hover { 
-    color: var(--theme-blue); 
-}
-
-.actionCell {
-    padding: 10px;
-    color: var(--theme-blue); 
+    color: var(--theme-lightblue); 
 }
 
 .deletebtn {
     border-radius: 4px;
     color: white; 
-    background-color: var(--theme-purple); 
+    background-color: #9A75F0; 
     border-style: none;
 }
 
@@ -80,5 +64,5 @@
     border-style: none;
     margin-right: 10px;
     color: white;
-    background-color: var(--theme-blue);
+    background-color: #6E9EEB;
 }
