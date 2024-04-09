@@ -10,10 +10,12 @@ import { Especeoiseau } from "../../../common/tables/Especeoiseau";
 export class DatabaseService {
   // TODO: A MODIFIER POUR VOTRE BD
   public connectionConfig: pg.ConnectionConfig = {
-    user: "elias",
+    // user: "elias",
+    user: "roudy",
     database: "ornithologue_db",
-    password: "zidane",
+    password: "abouzeid",
     port: 5432,
+    // port: 4200,
     host: "127.0.0.1",
     keepAlive: true,
   };
@@ -99,6 +101,7 @@ export class DatabaseService {
 
 
 
+  
 
 
   public async updateSpecie(specie: Especeoiseau): Promise<pg.QueryResult> {
@@ -133,6 +136,50 @@ export class DatabaseService {
       throw new Error(`Error updating Specie: ${error}`);
     }
   }
+  
+
+  public async addSpecie(specie: Especeoiseau): Promise<pg.QueryResult> {
+    const client = await this.pool.connect();
+    try {
+        // Preparing the columns and values for the INSERT statement
+        let columns: string[] = [];
+        let values: string[] = [];
+
+        if (specie.nomscientifique) {
+            columns.push("nomscientifique");
+            values.push(`'${specie.nomscientifique}'`);
+        }
+        if (specie.nomcommun) {
+            columns.push("nomcommun");
+            values.push(`'${specie.nomcommun}'`);
+        }
+        if (specie.statutspeces) {
+            columns.push("statutspeces");
+            values.push(`'${specie.statutspeces}'`);
+        }
+        if (specie.nomscientifiquecomsommer) {
+            columns.push("nomscientifiquecomsommer");
+            values.push(`'${specie.nomscientifiquecomsommer}'`);
+        } else {
+            columns.push("nomscientifiquecomsommer");
+            values.push(`NULL`);
+        }
+
+        // Construct the INSERT query
+        const query = `INSERT INTO ornithologue_db.especeoiseau (${columns.join(", ")}) VALUES (${values.join(", ")});`;
+
+        // Execute the query
+        const result = await client.query(query);
+        return result;
+    } catch (error) {
+        // Always a good practice to release the client before throwing the error
+        client.release();
+        throw new Error(`Error adding Specie: ${error}`);
+    } finally {
+        // Release the client back to the pool
+        client.release();
+    }
+}
 
   // public async deleteHotel(scientificName: string): Promise<pg.QueryResult> {
   //   if (scientificName.length === 0) throw new Error("Invalid delete query");
