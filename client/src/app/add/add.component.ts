@@ -13,8 +13,10 @@ import { CommunicationService } from "../communication.service";
 })
 
 export class AddComponent implements OnInit {
-  // public rooms: Room[] = [];
-  // public guests: Guest[] = [];
+  statusId : number;
+  predatorId : number;
+  statusOptions:{id:number,name: string}[] = [];
+  predatorOptions:{id:number,name: string}[] = [];
   public specie: Especeoiseau = {
     nomscientifique: "",
     nomcommun: "",
@@ -41,32 +43,34 @@ export class AddComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // this.route.paramMap.subscribe(params => {
-    //   const scientificName = params.get('nomscientifique');
-    //   if (scientificName) {
-    //     this.communicationService.getSpecieData(scientificName).subscribe((specieData:{specie: Especeoiseau, statusOptions: string[], predatorOptions: string[]}) => {
-    //       this.specie = specieData.specie;
-    //     });
-    //   }
-    // });
-  }
+        this.communicationService.getOptions().subscribe((optionsData:{statuses: string[], predators: string[]}) => {
+          console.log(optionsData)
+          this.statusOptions = optionsData.statuses.map((option, index) => ({
+            id: index,
+            name: option,
+        }));
+          this.predatorOptions = optionsData.predators.map((option, index) => ({
+            id: index,
+            name: option,
+        }));
+        });
+      }
   public changeSpecieScientificName(event: any, specie: Especeoiseau){
     const editField = event.target.textContent;
+    console.log(editField);
     specie.nomscientifique = editField;
+    console.log(specie.nomscientifique);
   }
   public changeSpecieCommonName(event: any, specie: Especeoiseau){
     const editField = event.target.textContent;
     specie.nomcommun = editField;
   }
-  public changeSpecieStatus(event: any, specie: Especeoiseau){
-    const editField = event.target.textContent;
-    specie.statutspeces = editField;
+  statusChange(statusId: number) {
+    this.specie.statutspeces = this.statusOptions[statusId].name;
   }
-  public changeSpeciePredator(event: any, specie: Especeoiseau){
-    const editField = event.target.textContent;
-    specie.nomscientifiquecomsommer = editField;
-}
-  
+  predatorChange(predatorId: number) {
+    this.specie.nomscientifiquecomsommer = this.predatorOptions[predatorId].name;
+  }
 
   public addSpecie(specie: Especeoiseau)  {
     if (specie.nomscientifiquecomsommer === "") {

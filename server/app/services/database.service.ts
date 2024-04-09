@@ -129,6 +129,28 @@ export class DatabaseService {
       throw new Error(`Error updating Specie: ${error}`);
     }
   }
+
+  public async getOptions(): Promise<{statuses: pg.QueryResult, predators: pg.QueryResult}> {
+    const client = await this.pool.connect();
+    // Requête pour récupérer toutes les valeurs possibles dans la colonne statutspeces
+    const statusQuery = `
+        SELECT DISTINCT statutspeces 
+        FROM ornithologue_db.especeoiseau;
+    `;
+    const statusRes = await client.query(statusQuery);
+    // Requête pour récupérer toutes les valeurs possibles dans la colonne nomscientifiquecomsommer
+    const predatorQuery = `
+        SELECT DISTINCT nomscientifique 
+        FROM ornithologue_db.especeoiseau;
+    `;
+    const predatorRes = await client.query(predatorQuery);
+    client.release();
+    const optionsData = {
+      statuses: statusRes,
+      predators: predatorRes,
+  };
+    return optionsData;
+  }
   
 
   public async addSpecie(specie: Especeoiseau): Promise<pg.QueryResult> {
@@ -169,10 +191,11 @@ export class DatabaseService {
         // Always a good practice to release the client before throwing the error
         client.release();
         throw new Error(`Error adding Specie: ${error}`);
-    } finally {
-        // Release the client back to the pool
-        client.release();
     }
+    //  finally {
+    //     // Release the client back to the pool
+    //     client.release();
+    // }
 }
 
   // public async deleteHotel(scientificName: string): Promise<pg.QueryResult> {

@@ -60,6 +60,62 @@ export class DatabaseController {
           });
       }
     );
+    router.put(
+      "/edit/:nomscientifique",
+      (req: Request, res: Response, _: NextFunction) => {
+        const specie: Especeoiseau = {
+          nomscientifique: req.body.nomscientifique,
+          nomcommun: req.body.nomcommun,
+          statutspeces: req.body.statutspeces,
+          nomscientifiquecomsommer: req.body.nomscientifiquecomsommer,
+        };
+
+        this.databaseService
+          .updateSpecie(specie)
+          .then((result: pg.QueryResult) => {
+            res.json(result.rowCount);
+          })
+          .catch((e: Error) => {
+            console.error(e.stack);
+          });
+      }
+    );
+    router.get(
+      "/add",
+      (req: Request, res: Response, _: NextFunction) => {
+        this.databaseService
+          .getOptions()
+          .then((result:{statuses: pg.QueryResult, predators: pg.QueryResult}) => {
+            // console.log(result);
+            const options = {statuses: result.statuses.rows.map((status: any) => status.statutspeces), predators: result.predators.rows.map((predator: any) => predator.nomscientifique)};
+            res.json(options);
+          })
+
+          .catch((e: Error) => {
+            console.error(e.stack);
+          });
+      }
+    );
+    router.post(
+      "/add",
+      (req: Request, res: Response, _: NextFunction) => {
+        const specie: Especeoiseau = {
+          nomscientifique: req.body.nomscientifique,
+          nomcommun: req.body.nomcommun,
+          statutspeces: req.body.statutspeces,
+          nomscientifiquecomsommer: req.body.nomscientifiquecomsommer,
+        };
+
+        this.databaseService
+          .addSpecie(specie)
+          .then((result: pg.QueryResult) => {
+            res.json(result.rowCount);
+          })
+          .catch((e: Error) => {
+            console.error(e.stack);
+          });
+      }
+    );
 
     // router.post(
     //   "/birdspecies/insert",
@@ -97,26 +153,7 @@ export class DatabaseController {
     //   }
     // );
 
-    router.put(
-      "/edit/:nomscientifique",
-      (req: Request, res: Response, _: NextFunction) => {
-        const specie: Especeoiseau = {
-          nomscientifique: req.body.nomscientifique,
-          nomcommun: req.body.nomcommun,
-          statutspeces: req.body.statutspeces,
-          nomscientifiquecomsommer: req.body.nomscientifiquecomsommer,
-        };
 
-        this.databaseService
-          .updateSpecie(specie)
-          .then((result: pg.QueryResult) => {
-            res.json(result.rowCount);
-          })
-          .catch((e: Error) => {
-            console.error(e.stack);
-          });
-      }
-    );
 
     // // ======= ROOMS ROUTES =======
     // router.get("/add", (req: Request, res: Response, _: NextFunction) => {
