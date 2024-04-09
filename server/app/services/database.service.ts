@@ -10,10 +10,11 @@ import { Especeoiseau } from "../../../common/tables/Especeoiseau";
 export class DatabaseService {
   // TODO: A MODIFIER POUR VOTRE BD
   public connectionConfig: pg.ConnectionConfig = {
-    // user: "elias",
-    user: "roudy",
+    user: "elias",
+    // user: "roudy",
     database: "ornithologue_db",
-    password: "abouzeid",
+    // password: "abouzeid",
+    password: "zidane",
     port: 5432,
     // port: 4200,
     host: "127.0.0.1",
@@ -85,11 +86,10 @@ export class DatabaseService {
     const statusRes = await client.query(statusQuery);
     // Requête pour récupérer toutes les valeurs possibles dans la colonne nomscientifiquecomsommer
     const predatorQuery = `
-        SELECT DISTINCT nomscientifiquecomsommer 
+        SELECT DISTINCT nomscientifique 
         FROM ornithologue_db.especeoiseau;
     `;
     const predatorRes = await client.query(predatorQuery);
-    console.log(predatorRes.rows);
     client.release();
     const speciesData = {
       specie: speciesRes,
@@ -108,26 +108,19 @@ export class DatabaseService {
     const client = await this.pool.connect();
     try {
     let toUpdateValues: string[] = [];
-
-    if (specie.nomscientifique.length > 0) toUpdateValues.push(`nomscientifique = '${specie.nomscientifique}'`);
+    console.log("specie",specie)
     if (specie.nomcommun && specie.nomcommun.length > 0) toUpdateValues.push(`nomcommun = '${specie.nomcommun}'`);
     if (specie.statutspeces && specie.statutspeces.length > 0) toUpdateValues.push(`statutspeces = '${specie.statutspeces}'`);
-    // if (specie.nomscientifiquecomsommer && specie.nomscientifiquecomsommer.length > 0) 
-      console.log(specie.nomscientifiquecomsommer)
-      toUpdateValues.push( specie.nomscientifiquecomsommer? `nomscientifiquecomsommer = '${specie.nomscientifiquecomsommer}'` : `nomscientifiquecomsommer = null`);
-
-    // if (
-    //   !specie.nomscientifique ||
-    //   specie.nomscientifique.length === 0 ||
-    //   toUpdateValues.length === 0
-    // )
-    //   throw new Error("Invalid specie update query");
-      // const { nomscientifique, ...updatedData } = specie;
+    toUpdateValues.push( specie.nomscientifiquecomsommer? `nomscientifiquecomsommer = '${specie.nomscientifiquecomsommer}'` : `nomscientifiquecomsommer = null`);
+      console.log("toUpdateValues",toUpdateValues.join(
+        ", "
+      ))
       const query = `UPDATE ornithologue_db.especeoiseau SET ${toUpdateValues.join(
         ", "
       )} WHERE nomscientifique = '${specie.nomscientifique}';
       `;
       const result = await client.query(query);
+      console.log("result",result)
       if (result.rowCount === 0) {
         throw new Error(`Specie ${specie.nomscientifique} not found`);
       }
@@ -169,8 +162,9 @@ export class DatabaseService {
         const query = `INSERT INTO ornithologue_db.especeoiseau (${columns.join(", ")}) VALUES (${values.join(", ")});`;
 
         // Execute the query
-        const result = await client.query(query);
-        return result;
+        const res = await client.query(query);
+    client.release();
+    return res;
     } catch (error) {
         // Always a good practice to release the client before throwing the error
         client.release();

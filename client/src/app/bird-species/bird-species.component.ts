@@ -34,7 +34,7 @@ export class BirdSpeciesComponent {
     this.router.navigate(["/delete", scientificName]);
   }
   public editBird(scientificName: string) {
-    console.log("editBird", scientificName);
+    // console.log("editBird", scientificName);
     this.router.navigate([`/edit/${scientificName}`]);
 
   }

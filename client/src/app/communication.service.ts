@@ -33,7 +33,6 @@ export class CommunicationService {
   // }
 
   public updateSpecie(specie: Especeoiseau): Observable<number> {
-    console.log("Va update avec : ",specie.nomscientifique);
     return this.http
       .put<number>(this.BASE_URL + `/edit/${specie.nomscientifique}`, specie)
       .pipe(catchError(this.handleError<number>("updateHotel")));
@@ -50,10 +49,10 @@ export class CommunicationService {
   //     .pipe(catchError(this.handleError<number>("deleteHotel")));
   // }
 
-  public getSpecieData(scientificName: string): Observable<{specie: Especeoiseau, statusOptions: string[], predatorOptions: string[]}> {
+  public getSpecieData(scientificName: string): Observable<{specie: Especeoiseau, statuses: string[], predators: string[]}> {
     return this.http
-      .get<{specie: Especeoiseau, statusOptions: string[], predatorOptions: string[]}>(this.BASE_URL + `/edit/${scientificName}`)
-      .pipe(catchError(this.handleError<{specie: Especeoiseau, statusOptions: string[], predatorOptions: string[]}>("getSpecie")));
+      .get<{specie: Especeoiseau, statuses: string[], predators: string[]}>(this.BASE_URL + `/edit/${scientificName}`)
+      .pipe(catchError(this.handleError<{specie: Especeoiseau, statuses: string[], predators: string[]}>("getSpecie")));
   }
 
   public getStatusOptions(scientificName: string): Observable<string[]> {

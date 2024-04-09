@@ -51,8 +51,7 @@ export class DatabaseController {
           .getSpecieByName(scientificName)
           .then((result:{specie: pg.QueryResult, statuses: pg.QueryResult, predators: pg.QueryResult}) => {
             // console.log(result);
-            const speciesData = {specie: result.specie.rows[0], statuses: result.statuses.rows.map((status: any) => status.statutspeces), predators: result.predators.rows.map((predator: any) => predator.nomscientifiquecomsommer)};
-            console.log(speciesData)
+            const speciesData = {specie: result.specie.rows[0], statuses: result.statuses.rows.map((status: any) => status.statutspeces), predators: result.predators.rows.map((predator: any) => predator.nomscientifique)};
             res.json(speciesData);
           })
 
@@ -101,12 +100,11 @@ export class DatabaseController {
     router.put(
       "/edit/:nomscientifique",
       (req: Request, res: Response, _: NextFunction) => {
-        console.log(req.body)
         const specie: Especeoiseau = {
           nomscientifique: req.body.nomscientifique,
-            nomcommun: req.body.nomcommun,
-            statutspeces: req.body.statutspeces,
-            nomscientifiquecomsommer: req.body.nomscientifiquecomsommer,
+          nomcommun: req.body.nomcommun,
+          statutspeces: req.body.statutspeces,
+          nomscientifiquecomsommer: req.body.nomscientifiquecomsommer,
         };
 
         this.databaseService

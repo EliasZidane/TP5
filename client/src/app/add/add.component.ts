@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Especeoiseau } from "../../../../common/tables/Especeoiseau";
-import { ActivatedRoute } from '@angular/router';
+// import { ActivatedRoute } from '@angular/router';
 // import { HotelPK } from "../../../../common/tables/HotelPK";
 // import { Room } from "../../../../common/tables/Room";
 // import { Guest } from "../../../../common/tables/Guest";
@@ -37,18 +37,18 @@ export class AddComponent implements OnInit {
   //   type: "",
   //   price: 0
   // }
-  constructor(private route: ActivatedRoute, private communicationService: CommunicationService) {
+  constructor(private communicationService: CommunicationService) {
   }
 
   public ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const scientificName = params.get('nomscientifique');
-      if (scientificName) {
-        this.communicationService.getSpecie(scientificName).subscribe((specie: Especeoiseau) => {
-          this.specie = specie;
-        });
-      }
-    });
+    // this.route.paramMap.subscribe(params => {
+    //   const scientificName = params.get('nomscientifique');
+    //   if (scientificName) {
+    //     this.communicationService.getSpecieData(scientificName).subscribe((specieData:{specie: Especeoiseau, statusOptions: string[], predatorOptions: string[]}) => {
+    //       this.specie = specieData.specie;
+    //     });
+    //   }
+    // });
   }
   public changeSpecieScientificName(event: any, specie: Especeoiseau){
     const editField = event.target.textContent;
@@ -63,16 +63,20 @@ export class AddComponent implements OnInit {
     specie.statutspeces = editField;
   }
   public changeSpeciePredator(event: any, specie: Especeoiseau){
-    console.log(event.target.textContent)
     const editField = event.target.textContent;
     specie.nomscientifiquecomsommer = editField;
 }
   
 
   public addSpecie(specie: Especeoiseau)  {
-    console.log(specie.nomscientifiquecomsommer)
     if (specie.nomscientifiquecomsommer === "") {
       specie.nomscientifiquecomsommer = null;
+    }
+    if (specie.nomcommun === "") {
+      specie.nomcommun = null;
+    }
+    if (specie.nomcommun === "") {
+      specie.nomcommun = null;
     }
     console.log(specie);
     this.communicationService.addSpecie(specie).subscribe((result: number) => {
@@ -80,8 +84,6 @@ export class AddComponent implements OnInit {
         this.duplicateError = true;
       } else {
         this.duplicateError = false;
-        // this.selectedHotel = hotel;
-        // this.getRooms();
       }
     });
 

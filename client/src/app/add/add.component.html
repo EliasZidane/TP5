@@ -44,10 +44,18 @@
       <tr>
         <td class="contentCell" contenteditable="true" (blur)="changeSpecieScientificName($event, specie)">{{ specie.nomscientifique }}</td>
         <td class="contentCell" contenteditable="true" (blur)="changeSpecieCommonName($event, specie)">{{ specie.nomcommun }}</td>
-        <td class="contentCell" contenteditable="true" (blur)="changeSpecieStatus($event, specie)">{{ specie.statutspeces}}</td>
-        <td class="contentCell" contenteditable="true" (blur)="changeSpeciePredator($event, specie)">{{ specie.nomscientifiquecomsommer }}</td>
+        <td>
+          <select [(ngModel)]="statusId" (change)="statusChange(statusId)">
+            <option *ngFor="let status of statusOptions" [ngValue]="status.id">{{ status.name }}</option>
+          </select>
+        </td>
+        <td>
+          <select [(ngModel)]="predatorId" (change)="predatorChange(predatorId)">
+            <option *ngFor="let predator of predatorOptions" [ngValue]="predator.id">{{ predator.name }}</option>
+          </select>
+        </td>
       </tr>
     </tbody>
   </table>
-  <button type="button" class="btn" (click)="addSpecie(specie)">Soumettre modifications</button>
+  <button type="button" class="btn" (click)="addSpecie(specie)">Ajouter l'espèce</button>
 </div>

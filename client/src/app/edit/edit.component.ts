@@ -14,10 +14,10 @@ import { CommunicationService } from "../communication.service";
 export class EditComponent implements OnInit {
   // public rooms: Room[] = [];
   // public guests: Guest[] = [];
-  status : string;
-  predator : string;
-  statusOptions: string[] = [];
-predatorOptions: string[] = [];
+  statusId : number;
+  predatorId : number;
+  statusOptions:{id:number,name: string}[] = [];
+  predatorOptions:{id:number,name: string}[] = [];
   public specie: Especeoiseau = {
     nomscientifique: "",
     nomcommun: "",
@@ -47,11 +47,17 @@ predatorOptions: string[] = [];
     this.route.paramMap.subscribe(params => {
       const scientificName = params.get('nomscientifique');
       if (scientificName) {
-        this.communicationService.getSpecieData(scientificName).subscribe((specieData:{specie: Especeoiseau, statusOptions: string[], predatorOptions: string[]}) => {
-          console.log(specieData)
+        this.communicationService.getSpecieData(scientificName).subscribe((specieData:{specie: Especeoiseau, statuses: string[], predators: string[]}) => {
+          console.log("recu après requete",specieData)
           this.specie = specieData.specie;
-          this.statusOptions = specieData.statusOptions;
-          this.predatorOptions = specieData.predatorOptions;
+          this.statusOptions = specieData.statuses.map((option, index) => ({
+            id: index,
+            name: option,
+        }));
+          this.predatorOptions = specieData.predators.map((option, index) => ({
+            id: index,
+            name: option,
+        }));
         });
       }
     });
@@ -61,27 +67,21 @@ predatorOptions: string[] = [];
     const editField = event.target.textContent;
     specie.nomcommun = editField;
   }
-  statusChange(status: string) {
-    this.specie.statutspeces = status;
+  statusChange(statusId: number) {
+    this.specie.statutspeces = this.statusOptions[statusId].name;
   }
-  predatorChange(predator: string) {
-    this.specie.nomscientifiquecomsommer = predator;
+  predatorChange(predatorId: number) {
+    this.specie.nomscientifiquecomsommer = this.predatorOptions[predatorId].name;
   }
   
 
   public updateSpecie(specie: Especeoiseau)  {
-    console.log(specie.nomscientifiquecomsommer)
-    if (specie.nomscientifiquecomsommer === "") {
-      specie.nomscientifiquecomsommer = null;
-    }
-    console.log(specie);
+    console.log("Va update avec : ",specie)
     this.communicationService.updateSpecie(specie).subscribe((result: number) => {
       if (result === 0) {
         this.duplicateError = true;
       } else {
         this.duplicateError = false;
-        // this.selectedHotel = hotel;
-        // this.getRooms();
       }
     });
 
