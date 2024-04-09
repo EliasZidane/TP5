@@ -14,6 +14,10 @@ import { CommunicationService } from "../communication.service";
 export class EditComponent implements OnInit {
   // public rooms: Room[] = [];
   // public guests: Guest[] = [];
+  status : string;
+  predator : string;
+  statusOptions: string[] = [];
+predatorOptions: string[] = [];
   public specie: Especeoiseau = {
     nomscientifique: "",
     nomcommun: "",
@@ -42,8 +46,11 @@ export class EditComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const scientificName = params.get('nomscientifique');
       if (scientificName) {
-        this.communicationService.getSpecie(scientificName).subscribe((specie: Especeoiseau) => {
-          this.specie = specie;
+        this.communicationService.getSpecieData(scientificName).subscribe((specieData:{specie: Especeoiseau, statusOptions: string[], predatorOptions: string[]}) => {
+          console.log(specieData)
+          this.specie = specieData.specie;
+          this.statusOptions = specieData.statusOptions;
+          this.predatorOptions = specieData.predatorOptions;
         });
       }
     });
@@ -53,15 +60,12 @@ export class EditComponent implements OnInit {
     const editField = event.target.textContent;
     specie.nomcommun = editField;
   }
-  public changeSpecieStatus(event: any, specie: Especeoiseau){
-    const editField = event.target.textContent;
-    specie.statutspeces = editField;
+  statusChange(status: string) {
+    this.specie.statutspeces = status;
   }
-  public changeSpeciePredator(event: any, specie: Especeoiseau){
-    console.log(event.target.textContent)
-    const editField = event.target.textContent;
-    specie.nomscientifiquecomsommer = editField;
-}
+  predatorChange(predator: string) {
+    this.specie.nomscientifiquecomsommer = predator;
+  }
   
 
   public updateSpecie(specie: Especeoiseau)  {

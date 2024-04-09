@@ -49,8 +49,11 @@ export class DatabaseController {
         var scientificName = req.params.scientificName ? req.params.scientificName : "";
         this.databaseService
           .getSpecieByName(scientificName)
-          .then((result: pg.QueryResult) => {
-            res.json(result.rows[0]);
+          .then((result:{specie: pg.QueryResult, statuses: pg.QueryResult, predators: pg.QueryResult}) => {
+            // console.log(result);
+            const speciesData = {specie: result.specie.rows[0], statuses: result.statuses.rows.map((status: any) => status.statutspeces), predators: result.predators.rows.map((predator: any) => predator.nomscientifiquecomsommer)};
+            console.log(speciesData)
+            res.json(speciesData);
           })
 
           .catch((e: Error) => {

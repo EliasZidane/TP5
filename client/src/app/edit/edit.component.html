@@ -44,8 +44,16 @@
       <tr>
         <td class="contentCell">{{ specie.nomscientifique }}</td>
         <td class="contentCell" contenteditable="true" (blur)="changeSpecieCommonName($event, specie)">{{ specie.nomcommun }}</td>
-        <td class="contentCell" contenteditable="true" (blur)="changeSpecieStatus($event, specie)">{{ specie.statutspeces}}</td>
-        <td class="contentCell" contenteditable="true" (blur)="changeSpeciePredator($event, specie)">{{ specie.nomscientifiquecomsommer }}</td>
+        <td>
+        <select [(ngModel)]="status" (change)="statusChange(status)">
+          <option *ngFor="let status of statusOptions" [ngValue]="status">{{ status }}</option>
+        </select>
+      </td>
+      <td>
+        <select [(ngModel)]="predator" (change)="predatorChange(predator)">
+          <option *ngFor="let predator of predatorOptions" [ngValue]="predator">{{ predator }}</option>
+        </select>
+      </td>
       </tr>
     </tbody>
   </table>

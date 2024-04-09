@@ -45,12 +45,22 @@ export class CommunicationService {
   //     .pipe(catchError(this.handleError<number>("deleteHotel")));
   // }
 
-  public getSpecie(scientificName: string): Observable<Especeoiseau> {
+  public getSpecieData(scientificName: string): Observable<{specie: Especeoiseau, statusOptions: string[], predatorOptions: string[]}> {
     return this.http
-      .get<Especeoiseau>(this.BASE_URL + `/edit/${scientificName}`)
-      .pipe(catchError(this.handleError<Especeoiseau>("getSpecie")));
+      .get<{specie: Especeoiseau, statusOptions: string[], predatorOptions: string[]}>(this.BASE_URL + `/edit/${scientificName}`)
+      .pipe(catchError(this.handleError<{specie: Especeoiseau, statusOptions: string[], predatorOptions: string[]}>("getSpecie")));
   }
 
+  public getStatusOptions(scientificName: string): Observable<string[]> {
+    return this.http
+      .get<string[]>(this.BASE_URL + `/edit/${scientificName}`)
+      .pipe(catchError(this.handleError<string[]>("getStatusOptions")));
+  }
+  public getPredatorOptions(scientificName: string): Observable<string[]> {
+    return this.http
+      .get<string[]>(this.BASE_URL + `/edit/${scientificName}`)
+      .pipe(catchError(this.handleError<string[]>("getPredatorOptions")));
+  }
   // public getRooms(hotelNb: string): Observable<Room[]> {
   //   return this.http
   //     .get<Room[]>(this.BASE_URL + `/rooms?hotelNb=${hotelNb}`)

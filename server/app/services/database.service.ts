@@ -65,12 +65,38 @@ export class DatabaseService {
   }
 
   // get the hotel names and numbers so so that the user can only select an existing hotel
-  public async getSpecieByName(scientificName: string): Promise<pg.QueryResult> {
+  public async getSpecieByName(scientificName: string): Promise<{specie: pg.QueryResult, statuses: pg.QueryResult, predators: pg.QueryResult}> {
     const client = await this.pool.connect();
-    const res = await client.query("SELECT nomscientifique, nomcommun, statutspeces, nomscientifiquecomsommer FROM ornithologue_db.especeoiseau WHERE nomscientifique = $1;", [scientificName]);
+
+    // Requête pour récupérer l'espèce en fonction du nom scientifique
+    const speciesQuery = `
+        SELECT nomscientifique, nomcommun, statutspeces, nomscientifiquecomsommer 
+        FROM ornithologue_db.especeoiseau 
+        WHERE nomscientifique = $1;
+    `;
+    const speciesRes = await client.query(speciesQuery, [scientificName]);
+    // Requête pour récupérer toutes les valeurs possibles dans la colonne statutspeces
+    const statusQuery = `
+        SELECT DISTINCT statutspeces 
+        FROM ornithologue_db.especeoiseau;
+    `;
+    const statusRes = await client.query(statusQuery);
+    // Requête pour récupérer toutes les valeurs possibles dans la colonne nomscientifiquecomsommer
+    const predatorQuery = `
+        SELECT DISTINCT nomscientifiquecomsommer 
+        FROM ornithologue_db.especeoiseau;
+    `;
+    const predatorRes = await client.query(predatorQuery);
+    console.log(predatorRes.rows);
     client.release();
-    return res;
-  }
+    const speciesData = {
+      specie: speciesRes,
+      statuses: statusRes,
+      predators: predatorRes,
+  };
+    return speciesData;
+}
+
 
 
 
