@@ -17,7 +17,7 @@ export class EditComponent implements OnInit {
   statusId : number;
   predatorId : number;
   statusOptions:{id:number,name: string}[] = [];
-  predatorOptions:{id:number,name: string}[] = [];
+  predatorOptions:{id:number,name: string|null}[] = [];
   public specie: Especeoiseau = {
     nomscientifique: "",
     nomcommun: "",
@@ -58,6 +58,16 @@ export class EditComponent implements OnInit {
             id: index,
             name: option,
         }));
+        this.predatorOptions.push({id: this.predatorOptions.length, name: null});
+        this.statusId = this.statusOptions.findIndex((option) => option.name === this.specie.statutspeces);
+        this.predatorId = this.predatorOptions.findIndex((option) => option.name === this.specie.nomscientifiquecomsommer);
+
+
+
+
+
+
+
         });
       }
     });

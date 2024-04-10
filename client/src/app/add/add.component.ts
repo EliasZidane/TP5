@@ -16,7 +16,7 @@ export class AddComponent implements OnInit {
   statusId : number;
   predatorId : number;
   statusOptions:{id:number,name: string}[] = [];
-  predatorOptions:{id:number,name: string}[] = [];
+  predatorOptions:{id:number,name: string|null}[] = [];
   public specie: Especeoiseau = {
     nomscientifique: "",
     nomcommun: "",
@@ -53,9 +53,11 @@ export class AddComponent implements OnInit {
             id: index,
             name: option,
         }));
+        this.predatorOptions.push({id: this.predatorOptions.length, name: null});
         });
       }
   public changeSpecieScientificName(event: any, specie: Especeoiseau){
+    event.stopPropagation();
     const editField = event.target.textContent;
     console.log(editField);
     specie.nomscientifique = editField;
