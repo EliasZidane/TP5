@@ -138,20 +138,20 @@ export class DatabaseController {
     //   }
     // );
 
-    // router.post(
-    //   "/birdspecies/delete/:scientificName",
-    //   (req: Request, res: Response, _: NextFunction) => {
-    //     const scientificName: string = req.params.scientificName;
-    //     this.databaseService
-    //       .deleteHotel(scientificName)
-    //       .then((result: pg.QueryResult) => {
-    //         res.json(result.rowCount);
-    //       })
-    //       .catch((e: Error) => {
-    //         console.error(e.stack);
-    //       });
-    //   }
-    // );
+    router.post(
+      "/birdSpecies/",
+      (req: Request, res: Response, _: NextFunction) => {
+        console.log("Va delete ",req.body)
+        this.databaseService
+          .deleteSpecie(req.body.nomscientifique)
+          .then((result: pg.QueryResult) => {
+            res.json(result.rowCount);
+          })
+          .catch((e: Error) => {
+            console.error(e.stack);
+          });
+      }
+    );
 
 
 

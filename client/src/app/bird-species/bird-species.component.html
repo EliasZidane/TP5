@@ -14,14 +14,12 @@
     <tbody>
       <tr *ngFor="let specie of species; let i = index">
         <td class="contentCell">{{ specie.nomscientifique }}</td>
-        <!-- <td class="contentCell" contenteditable="true" (blur)="changeHotelName($event, i)">{{ hotel.name}}</td>
-        <td class="contentCell" contenteditable="true" (blur)="changeHotelCity($event, i)">{{ hotel.city }}</td> -->
         <td class="contentCell">{{ specie.nomcommun }}</td>
         <td class="contentCell">{{ specie.statutspeces}}</td>
         <td class="contentCell">{{ specie.nomscientifiquecomsommer }}</td>
         <td class="actionCell">
           <button type="button" class="editbtn" (click)="editBird(specie.nomscientifique)"><i class="fa fa-edit"></i></button>
-          <button type="button" class="deletebtn" (click)="deleteBird(specie.nomscientifique)"><i class="fa fa-trash-o"></i></button>
+          <button type="button" class="deletebtn" (click)="deleteBird(specie)"><i class="fa fa-trash-o"></i></button>
         </td>
       </tr>
 

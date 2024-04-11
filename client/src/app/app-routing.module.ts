@@ -12,7 +12,6 @@ const routes: Routes = [
   { path: "add", component: AddComponent },
   { path: "birdSpecies", component: BirdSpeciesComponent },
   { path: "edit/:nomscientifique", component: EditComponent },
-  // { path: "delete/:nomscientifique", component: DeleteComponent },
 ];
 
 @NgModule({

@@ -9,13 +9,8 @@ import { Router } from "@angular/router";
   styleUrls: ["./bird-species.component.css"],
 })
 export class BirdSpeciesComponent {
-  // @ViewChild("newHotelNb") newHotelNb: ElementRef;
-  // @ViewChild("newHotelName") newHotelName: ElementRef;
-  // @ViewChild("newHotelCity") newHotelCity: ElementRef;
-
   public species: Especeoiseau[] = [];
   public duplicateError: boolean = false;
-
   public constructor(private communicationService: CommunicationService, 
     private router: Router
   ) {}
@@ -30,9 +25,14 @@ export class BirdSpeciesComponent {
     });
   }
 
-  public deleteBird(scientificName: string) {
-    this.communicationService.deleteBird(scientificName).subscribe((res: any) => {
-      
+  public deleteBird(specie: Especeoiseau) {
+    this.communicationService.deleteSpecie(specie).subscribe((res: number) => {
+      if (res === 0) {
+        this.duplicateError = true;
+      } else {
+        this.refresh();
+        this.duplicateError = false;
+      }
     });
   }
   public editBird(scientificName: string) {
@@ -58,12 +58,9 @@ export class BirdSpeciesComponent {
   //   });
   // }
 
-  // private refresh() {
-    // this.getSpecies();
-    // this.newHotelNb.nativeElement.innerText = "";
-    // this.newHotelName.nativeElement.innerText = "";
-    // this.newHotelCity.nativeElement.innerText = "";
-  // }
+  private refresh() {
+    this.getSpecies();
+  }
 
   // public deleteHotel(hotelNb: string) {
   //   this.communicationService.deleteHotel(hotelNb).subscribe((res: any) => {

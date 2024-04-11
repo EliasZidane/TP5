@@ -198,16 +198,14 @@ export class DatabaseService {
     // }
 }
 
-  // public async deleteHotel(scientificName: string): Promise<pg.QueryResult> {
-  //   if (scientificName.length === 0) throw new Error("Invalid delete query");
-
-  //   const client = await this.pool.connect();
-  //   const query = `DELETE FROM ornithologue_db.Hotel WHERE scientificName = '${scientificName}';`;
-
-  //   const res = await client.query(query);
-  //   client.release();
-  //   return res;
-  // }
+  public async deleteSpecie(scientificName: string): Promise<pg.QueryResult> {
+    if (scientificName.length === 0) throw new Error("Invalid delete query");
+    const client = await this.pool.connect();
+    const query = `DELETE FROM ornithologue_db.especeoiseau WHERE nomscientifique = '${scientificName}';`;
+    const res = await client.query(query);
+    client.release();
+    return res;
+  }
 
   // // ======= ROOMS =======
   // public async createRoom(room: Room): Promise<pg.QueryResult> {
