@@ -49,6 +49,12 @@ export class CommunicationService {
   //     .pipe(catchError(this.handleError<number>("deleteHotel")));
   // }
 
+  public deleteSpecie(specie: Especeoiseau): Observable<number> {
+    console.log("Va delete ",specie.nomscientifique);
+    return this.http
+      .post<number>(this.BASE_URL + `/add`, specie)
+      .pipe(catchError(this.handleError<number>("addSpecie")));
+  }
   public getSpecieData(scientificName: string): Observable<{specie: Especeoiseau, statuses: string[], predators: string[]}> {
     return this.http
       .get<{specie: Especeoiseau, statuses: string[], predators: string[]}>(this.BASE_URL + `/edit/${scientificName}`)

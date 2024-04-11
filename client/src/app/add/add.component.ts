@@ -64,6 +64,7 @@ export class AddComponent implements OnInit {
     console.log(specie.nomscientifique);
   }
   public changeSpecieCommonName(event: any, specie: Especeoiseau){
+    console.log("Pas normal")
     const editField = event.target.textContent;
     specie.nomcommun = editField;
   }

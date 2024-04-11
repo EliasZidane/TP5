@@ -31,7 +31,9 @@ export class BirdSpeciesComponent {
   }
 
   public deleteBird(scientificName: string) {
-    this.router.navigate(["/delete", scientificName]);
+    this.communicationService.deleteBird(scientificName).subscribe((res: any) => {
+      
+    });
   }
   public editBird(scientificName: string) {
     // console.log("editBird", scientificName);
