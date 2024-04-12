@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Especeoiseau } from "../../../../common/tables/Especeoiseau";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 // import { HotelPK } from "../../../../common/tables/HotelPK";
 // import { Room } from "../../../../common/tables/Room";
 // import { Guest } from "../../../../common/tables/Guest";
@@ -40,7 +40,7 @@ export class EditComponent implements OnInit {
   //   type: "",
   //   price: 0
   // }
-  constructor(private route: ActivatedRoute, private communicationService: CommunicationService) {
+  constructor(private route: ActivatedRoute,  private router: Router,private communicationService: CommunicationService) {
   }
 
   public ngOnInit(): void {
@@ -93,6 +93,7 @@ export class EditComponent implements OnInit {
       } else {
         this.duplicateError = false;
       }
+      this.router.navigate(["/birdSpecies"]);
     });
 
   }

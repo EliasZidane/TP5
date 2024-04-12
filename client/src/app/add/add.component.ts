@@ -5,6 +5,7 @@ import { Especeoiseau } from "../../../../common/tables/Especeoiseau";
 // import { Room } from "../../../../common/tables/Room";
 // import { Guest } from "../../../../common/tables/Guest";
 import { CommunicationService } from "../communication.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-room",
@@ -39,7 +40,7 @@ export class AddComponent implements OnInit {
   //   type: "",
   //   price: 0
   // }
-  constructor(private communicationService: CommunicationService) {
+  constructor(private communicationService: CommunicationService, private router: Router) {
   }
 
   public ngOnInit(): void {
@@ -90,6 +91,7 @@ export class AddComponent implements OnInit {
       if (result === 0) {
         this.duplicateError = true;
       } else {
+        this.router.navigate(["/birdSpecies"]);
         this.duplicateError = false;
       }
     });
