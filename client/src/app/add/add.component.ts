@@ -1,9 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { Especeoiseau } from "../../../../common/tables/Especeoiseau";
-// import { ActivatedRoute } from '@angular/router';
-// import { HotelPK } from "../../../../common/tables/HotelPK";
-// import { Room } from "../../../../common/tables/Room";
-// import { Guest } from "../../../../common/tables/Guest";
 import { CommunicationService } from "../communication.service";
 import { Router } from "@angular/router";
 

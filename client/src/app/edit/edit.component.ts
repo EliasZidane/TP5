@@ -1,9 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Especeoiseau } from "../../../../common/tables/Especeoiseau";
 import { ActivatedRoute, Router } from '@angular/router';
-// import { HotelPK } from "../../../../common/tables/HotelPK";
-// import { Room } from "../../../../common/tables/Room";
-// import { Guest } from "../../../../common/tables/Guest";
 import { CommunicationService } from "../communication.service";
 
 @Component({
@@ -12,8 +9,6 @@ import { CommunicationService } from "../communication.service";
   styleUrls: ["./edit.component.css"],
 })
 export class EditComponent implements OnInit {
-  // public rooms: Room[] = [];
-  // public guests: Guest[] = [];
   statusId : number;
   predatorId : number;
   statusOptions:{id:number,name: string}[] = [
@@ -32,18 +27,6 @@ export class EditComponent implements OnInit {
   public duplicateError: boolean = false;
   public invalidSpeciePK: boolean = false;
 
-  // public selectedHotel: HotelPK = {
-  //   hotelnb: "-1",
-  //   name: "placeholderHotel",
-  // };
-
-  
-  // public selectedRoom: Room = {
-  //   hotelnb: "-1",
-  //   roomnb: "-1",
-  //   type: "",
-  //   price: 0
-  // }
   constructor(private route: ActivatedRoute,  private router: Router,private communicationService: CommunicationService) {
   }
 
@@ -61,13 +44,6 @@ export class EditComponent implements OnInit {
         this.predatorOptions.push({id: this.predatorOptions.length, name: null});
         this.statusId = this.statusOptions.findIndex((option) => option.name === this.specie.statutspeces);
         this.predatorId = this.predatorOptions.findIndex((option) => option.name === this.specie.nomscientifiquecomsommer);
-
-
-
-
-
-
-
         });
       }
     });
@@ -99,31 +75,5 @@ export class EditComponent implements OnInit {
       this.router.navigate(["/birdSpecies"]);
     });
 
-  }
-
-  public updateSelectedRoom(roomID: any) {
-    // this.selectedRoom = this.rooms[roomID];
-    this.refresh();
-  }
-
-  public getRooms(): void {
-    // this.communicationService
-    //   .getRooms(this.selectedHotel.hotelnb)
-    //   .subscribe((rooms: Room[]) => {
-    //     this.rooms = rooms;
-    //     this.selectedRoom = this.rooms[0];
-    //   });
-  }
-
-  private refresh() {
-    this.getGuests();
-  }
-
-  public getGuests(): void {
-    // this.communicationService
-    //   .getGuests(this.selectedHotel.hotelnb, this.selectedRoom.roomnb)
-    //   .subscribe((guests: Guest[]) => {
-    //     this.guests = guests;
-      // });
   }
 }
