@@ -86,7 +86,7 @@ export class EditComponent implements OnInit {
   
 
   public updateSpecie(specie: Especeoiseau)  {
-    if (!specie.nomscientifique.match(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/) || specie.nomscientifique.length < 2 || specie.nomscientifique.length > 30){
+    if (!specie.nomscientifique.match(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/) || !specie.nomcommun.match(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/)|| specie.nomscientifique.length < 2 || specie.nomscientifique.length > 30){
       this.invalidSpeciePK = true;
       return;
     }

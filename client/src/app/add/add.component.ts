@@ -23,8 +23,8 @@ export class AddComponent implements OnInit {
   ]
   predatorOptions:{id:number,name: string|null}[] = [];
   public specie: Especeoiseau = {
-    nomscientifique: "",
-    nomcommun: "",
+    nomscientifique: "Fennec",
+    nomcommun: "Vulpes zerda",
     statutspeces: this.statusOptions[this.statusId].name,
     nomscientifiquecomsommer: "",
   
@@ -48,9 +48,7 @@ export class AddComponent implements OnInit {
   public changeSpecieScientificName(event: any, specie: Especeoiseau){
     event.stopPropagation();
     const editField = event.target.textContent;
-    console.log("editfield",editField);
     specie.nomscientifique = editField;
-    console.log("updated to",specie.nomscientifique);
   }
   public changeSpecieCommonName(event: any, specie: Especeoiseau){
     const editField = event.target.textContent;
@@ -64,7 +62,7 @@ export class AddComponent implements OnInit {
   }
 
   public addSpecie(specie: Especeoiseau)  {
-    if (!specie.nomscientifique.match(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/) || specie.nomscientifique.length < 2 || specie.nomscientifique.length > 30){
+    if (!specie.nomscientifique.match(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/) || !specie.nomcommun.match(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/) ||specie.nomscientifique.length < 2 || specie.nomscientifique.length > 30 || specie.nomcommun.length < 2 || specie.nomcommun.length > 30){
       this.invalidSpeciePK = true;
       return;
     }
