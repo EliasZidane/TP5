@@ -42,8 +42,20 @@
     </thead>
     <tbody>
       <tr>
-        <td class="contentCell" contenteditable="true" (blur)="changeSpecieScientificName($event, specie)">{{ specie.nomscientifique }}</td>
-        <td class="contentCell" contenteditable="true" (blur)="changeSpecieCommonName($event, specie)">{{ specie.nomcommun }}</td>
+        <td>
+        <input type="text" name="nomscientifique" [(ngModel)]="specie.nomscientifique" class="form-control" id="nomscientifique" required #nomscientifique="ngModel"
+        pattern="[A-Za-zÀ-ÖØ-öø-ÿ]+" 
+        minlength="2" 
+        maxlength="30">
+
+        </td>
+        <td>
+          <input type="text" name="nomcommun" [(ngModel)]="specie.nomcommun" class="form-control" id="nomcommun" required #nomcommun="ngModel"
+          pattern="[A-Za-zÀ-ÖØ-öø-ÿ]+" 
+          minlength="2" 
+          maxlength="30">
+  
+        </td>
         <td>
           <select [(ngModel)]="statusId" (change)="statusChange(statusId)">
             <option *ngFor="let status of statusOptions" [ngValue]="status.id">{{ status.name }}</option>
@@ -58,4 +70,5 @@
     </tbody>
   </table>
   <button type="button" class="btn" (click)="addSpecie(specie)">Ajouter l'espèce</button>
+  <p *ngIf="invalidSpeciePK"> Espèce invalide </p>
 </div>

@@ -36,51 +36,11 @@ export class BirdSpeciesComponent {
     });
   }
   public editBird(scientificName: string) {
-    // console.log("editBird", scientificName);
     this.router.navigate([`/edit/${scientificName}`]);
 
   }
 
-  // public insertHotel(): void {
-  //   const hotel: any = {
-  //     hotelnb: this.newHotelNb.nativeElement.innerText,
-  //     name: this.newHotelName.nativeElement.innerText,
-  //     city: this.newHotelCity.nativeElement.innerText,
-
-  //   };
-
-  //   this.communicationService.insertHotel(hotel).subscribe((res: number) => {
-  //     if (res > 0) {
-  //       this.communicationService.filter("update");
-  //     }
-  //     this.refresh();
-  //     this.duplicateError = res === -1;
-  //   });
-  // }
-
   private refresh() {
     this.getSpecies();
   }
-
-  // public deleteHotel(hotelNb: string) {
-  //   this.communicationService.deleteHotel(hotelNb).subscribe((res: any) => {
-  //     this.refresh();
-  //   });
-  // }
-
-  // public changeHotelName(event: any, i:number){
-  //   const editField = event.target.textContent;
-  //   this.species[i]. = editField;
-  // }
-
-  // public changeHotelCity(event: any, i:number){
-  //   const editField = event.target.textContent;
-  //   this.species[i].city = editField;
-  // }
-
-  // public updateHotel(i: number) {
-  //   this.communicationService.updateHotel(this.species[i]).subscribe((res: any) => {
-  //     this.refresh();
-  //   });
-  // }
 }

@@ -14,58 +14,45 @@ import { Router } from "@angular/router";
 })
 
 export class AddComponent implements OnInit {
-  statusId : number;
-  predatorId : number;
-  statusOptions:{id:number,name: string}[] = [];
+  statusId : number = 0;
+  predatorId : number = 0;
+  statusOptions:{id:number,name: string}[] = [
+    {id: 0, name: 'Non menacée'},
+    {id: 1, name: 'Préoccupation mineure'},
+    {id: 2, name: 'Vulnérable'}
+  ]
   predatorOptions:{id:number,name: string|null}[] = [];
   public specie: Especeoiseau = {
     nomscientifique: "",
     nomcommun: "",
-    statutspeces: "",
+    statutspeces: this.statusOptions[this.statusId].name,
     nomscientifiquecomsommer: "",
   
   };
   public duplicateError: boolean = false;
   public invalidSpeciePK: boolean = false;
 
-  // public selectedHotel: HotelPK = {
-  //   hotelnb: "-1",
-  //   name: "placeholderHotel",
-  // };
-
-  
-  // public selectedRoom: Room = {
-  //   hotelnb: "-1",
-  //   roomnb: "-1",
-  //   type: "",
-  //   price: 0
-  // }
   constructor(private communicationService: CommunicationService, private router: Router) {
   }
 
   public ngOnInit(): void {
-        this.communicationService.getOptions().subscribe((optionsData:{statuses: string[], predators: string[]}) => {
-          console.log(optionsData)
-          this.statusOptions = optionsData.statuses.map((option, index) => ({
-            id: index,
+    this.communicationService.getOptions().subscribe((predators: string[]) => {
+      this.predatorOptions.push({ id: 0, name: null });
+        const realOptions = predators.map((option, index) => ({
+            id: index + 1,
             name: option,
         }));
-          this.predatorOptions = optionsData.predators.map((option, index) => ({
-            id: index,
-            name: option,
-        }));
-        this.predatorOptions.push({id: this.predatorOptions.length, name: null});
-        });
-      }
+        this.predatorOptions = this.predatorOptions.concat(realOptions);
+                });
+  }
   public changeSpecieScientificName(event: any, specie: Especeoiseau){
     event.stopPropagation();
     const editField = event.target.textContent;
-    console.log(editField);
+    console.log("editfield",editField);
     specie.nomscientifique = editField;
-    console.log(specie.nomscientifique);
+    console.log("updated to",specie.nomscientifique);
   }
   public changeSpecieCommonName(event: any, specie: Especeoiseau){
-    console.log("Pas normal")
     const editField = event.target.textContent;
     specie.nomcommun = editField;
   }
@@ -77,16 +64,10 @@ export class AddComponent implements OnInit {
   }
 
   public addSpecie(specie: Especeoiseau)  {
-    if (specie.nomscientifiquecomsommer === "") {
-      specie.nomscientifiquecomsommer = null;
+    if (!specie.nomscientifique.match(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/) || specie.nomscientifique.length < 2 || specie.nomscientifique.length > 30){
+      this.invalidSpeciePK = true;
+      return;
     }
-    if (specie.nomcommun === "") {
-      specie.nomcommun = null;
-    }
-    if (specie.nomcommun === "") {
-      specie.nomcommun = null;
-    }
-    console.log(specie);
     this.communicationService.addSpecie(specie).subscribe((result: number) => {
       if (result === 0) {
         this.duplicateError = true;
@@ -98,66 +79,3 @@ export class AddComponent implements OnInit {
 
   }
 }
-
-
-
-//   public updateSelectedHotel(hotelID: any) {
-//     // this.selectedHotel = this.hotelPKs[hotelID];
-//     // this.getRooms();
-//     // this.refresh();
-//   }
-
-//   public getRooms(): void {
-//     // this.communicationService
-//     //   .getRooms(this.selectedHotel.hotelnb)
-//     //   .subscribe((rooms: Room[]) => {
-//     //     this.rooms = rooms;
-//     //   });
-//   }
-
-//   private refresh() {
-//     this.getRooms();
-//     this.newRoomNb.nativeElement.innerText = "";
-//     this.newRoomType.nativeElement.innerText = "";
-//     this.newRoomPrice.nativeElement.innerText = "";
-//   }
-
-//   public changeRoomType(event: any, i: number) {
-//     // const editField = event.target.textContent;
-//     // this.rooms[i].type = editField;
-//   }
-
-//   public changeRoomPrice(event: any, i: number) {
-//     // const editField = event.target.textContent;
-//     // this.rooms[i].price = editField;
-//   }
-
-//   public deleteRoom(hotelNb: string, roomNb: string) {
-//     this.communicationService
-//       .deleteRoom(hotelNb, roomNb)
-//       .subscribe((res: any) => {
-//         this.refresh();
-//       });
-//   }
-
-//   public insertRoom(): void {
-//     // const room: Room = {
-//     //   hotelnb: this.selectedHotel.hotelnb,
-//     //   roomnb: this.newRoomNb.nativeElement.innerText,
-//     //   type: this.newRoomType.nativeElement.innerText,
-//     //   price: this.newRoomPrice.nativeElement.innerText,
-//     // };
-
-//     // this.communicationService.insertRoom(room).subscribe((res: number) => {
-//     //   this.refresh();
-//     // });
-//   }
-
-//   public updateRoom(i: number) {
-//     // this.communicationService
-//     //   .updateRoom(this.rooms[i])
-//     //   .subscribe((res: any) => {
-//     //     this.refresh();
-//     //   });
-//   }
-// 

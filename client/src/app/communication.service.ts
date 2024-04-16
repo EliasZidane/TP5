@@ -38,7 +38,6 @@ export class CommunicationService {
       .pipe(catchError(this.handleError<number>("updateHotel")));
   }
   public addSpecie(specie: Especeoiseau): Observable<number> {
-    console.log("Va add avec : ",specie.nomscientifique);
     return this.http
       .post<number>(this.BASE_URL + `/add`, specie)
       .pipe(catchError(this.handleError<number>("addSpecie")));
@@ -49,11 +48,14 @@ export class CommunicationService {
   //     .pipe(catchError(this.handleError<number>("deleteHotel")));
   // }
 
-  public deleteSpecie(specie: Especeoiseau): Observable<number> {
-    console.log("Va delete ",specie.nomscientifique);
+  public deleteSpecie(specie: Especeoiseau): Observable<any> {
+    const options = {
+      body: specie,
+      options: { headers: { "Content-Type": "application/json" } },
+    }
     return this.http
-      .post<number>(this.BASE_URL + `/birdSpecies`, specie)
-      .pipe(catchError(this.handleError<number>("deleteSpecie")));
+      .delete<any>(this.BASE_URL + `/birdSpecies`, options)
+      .pipe(catchError(this.handleError<any>("deleteSpecie")));
   }
   public getSpecieData(scientificName: string): Observable<{specie: Especeoiseau, statuses: string[], predators: string[]}> {
     return this.http
@@ -61,10 +63,10 @@ export class CommunicationService {
       .pipe(catchError(this.handleError<{specie: Especeoiseau, statuses: string[], predators: string[]}>("getSpecie")));
   }
 
-  public getOptions(): Observable<{statuses:string[], predators: string[]}> {
+  public getOptions(): Observable<string[]> {
     return this.http
-      .get<{statuses:string[], predators: string[]}>(this.BASE_URL + `/add`)
-      .pipe(catchError(this.handleError<{statuses:string[], predators: string[]}>("getStatusOptions")));
+      .get<string[]>(this.BASE_URL + `/add`)
+      .pipe(catchError(this.handleError<string[]>("getStatusOptions")));
   }
   // public getRooms(hotelNb: string): Observable<Room[]> {
   //   return this.http

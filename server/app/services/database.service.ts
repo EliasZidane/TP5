@@ -68,7 +68,7 @@ export class DatabaseService {
   }
 
   // get the hotel names and numbers so so that the user can only select an existing hotel
-  public async getSpecieByName(scientificName: string): Promise<{specie: pg.QueryResult, statuses: pg.QueryResult, predators: pg.QueryResult}> {
+  public async getSpecieByName(scientificName: string): Promise<{specie: pg.QueryResult,predators: pg.QueryResult}> {
     const client = await this.pool.connect();
 
     // Requête pour récupérer l'espèce en fonction du nom scientifique
@@ -78,12 +78,6 @@ export class DatabaseService {
         WHERE nomscientifique = $1;
     `;
     const speciesRes = await client.query(speciesQuery, [scientificName]);
-    // Requête pour récupérer toutes les valeurs possibles dans la colonne statutspeces
-    const statusQuery = `
-        SELECT DISTINCT statutspeces 
-        FROM ornithologue_db.especeoiseau;
-    `;
-    const statusRes = await client.query(statusQuery);
     // Requête pour récupérer toutes les valeurs possibles dans la colonne nomscientifiquecomsommer
     const predatorQuery = `
         SELECT DISTINCT nomscientifique 
@@ -93,7 +87,6 @@ export class DatabaseService {
     client.release();
     const speciesData = {
       specie: speciesRes,
-      statuses: statusRes,
       predators: predatorRes,
   };
     return speciesData;
@@ -108,19 +101,14 @@ export class DatabaseService {
     const client = await this.pool.connect();
     try {
     let toUpdateValues: string[] = [];
-    console.log("specie",specie)
     if (specie.nomcommun && specie.nomcommun.length > 0) toUpdateValues.push(`nomcommun = '${specie.nomcommun}'`);
     if (specie.statutspeces && specie.statutspeces.length > 0) toUpdateValues.push(`statutspeces = '${specie.statutspeces}'`);
     toUpdateValues.push( specie.nomscientifiquecomsommer? `nomscientifiquecomsommer = '${specie.nomscientifiquecomsommer}'` : `nomscientifiquecomsommer = null`);
-      console.log("toUpdateValues",toUpdateValues.join(
-        ", "
-      ))
       const query = `UPDATE ornithologue_db.especeoiseau SET ${toUpdateValues.join(
         ", "
       )} WHERE nomscientifique = '${specie.nomscientifique}';
       `;
       const result = await client.query(query);
-      console.log("result",result)
       if (result.rowCount === 0) {
         throw new Error(`Specie ${specie.nomscientifique} not found`);
       }
@@ -130,26 +118,15 @@ export class DatabaseService {
     }
   }
 
-  public async getOptions(): Promise<{statuses: pg.QueryResult, predators: pg.QueryResult}> {
+  public async getOptions(): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
-    // Requête pour récupérer toutes les valeurs possibles dans la colonne statutspeces
-    const statusQuery = `
-        SELECT DISTINCT statutspeces 
-        FROM ornithologue_db.especeoiseau;
-    `;
-    const statusRes = await client.query(statusQuery);
-    // Requête pour récupérer toutes les valeurs possibles dans la colonne nomscientifiquecomsommer
     const predatorQuery = `
         SELECT DISTINCT nomscientifique 
         FROM ornithologue_db.especeoiseau;
     `;
     const predatorRes = await client.query(predatorQuery);
     client.release();
-    const optionsData = {
-      statuses: statusRes,
-      predators: predatorRes,
-  };
-    return optionsData;
+    return predatorRes;
   }
   
 
@@ -198,14 +175,22 @@ export class DatabaseService {
     // }
 }
 
-  public async deleteSpecie(scientificName: string): Promise<pg.QueryResult> {
-    if (scientificName.length === 0) throw new Error("Invalid delete query");
-    const client = await this.pool.connect();
-    const query = `DELETE FROM ornithologue_db.especeoiseau WHERE nomscientifique = '${scientificName}';`;
-    const res = await client.query(query);
-    client.release();
-    return res;
-  }
+public async deleteSpecie(scientificName: string): Promise<pg.QueryResult> {
+  if (scientificName.length === 0) throw new Error("Invalid delete query");
+  const client = await this.pool.connect();
+
+  // Suppression des dépendances
+  await client.query(`DELETE FROM ornithologue_db.resider WHERE nomscientifique = '${scientificName}';`);
+  await client.query(`DELETE FROM ornithologue_db.observation WHERE nomscientifique = '${scientificName}';`);
+  await client.query(`UPDATE ornithologue_db.especeoiseau SET nomscientifiquecomsommer = NULL WHERE nomscientifiquecomsommer = '${scientificName}';`);
+
+  // Suppression de l'espèce elle-même
+  const res = await client.query(`DELETE FROM ornithologue_db.especeoiseau WHERE nomscientifique = '${scientificName}';`);
+  
+  client.release();
+  return res;
+}
+
 
   // // ======= ROOMS =======
   // public async createRoom(room: Room): Promise<pg.QueryResult> {

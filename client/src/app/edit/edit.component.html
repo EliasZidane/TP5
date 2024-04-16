@@ -44,7 +44,13 @@
     <tbody>
       <tr>
         <td class="contentCell">{{ specie.nomscientifique }}</td>
-        <td class="contentCell" contenteditable="true" (blur)="changeSpecieCommonName($event, specie)">{{ specie.nomcommun }}</td>
+        <td>
+            <input type="text" name="nomcommun" [(ngModel)]="specie.nomcommun" class="form-control" id="nomcommun" required #nomcommun="ngModel"
+            pattern="[A-Za-zÀ-ÖØ-öø-ÿ]+" 
+            minlength="2" 
+            maxlength="30">
+    
+        </td>
         <td>
         <select [(ngModel)]="statusId" (change)="statusChange(statusId)">
           <option *ngFor="let status of statusOptions" [ngValue]="status.id">{{ status.name }}</option>
@@ -59,5 +65,7 @@
     </tbody>
   </table>
   <button type="button" class="btn" (click)="updateSpecie(specie)">Soumettre modifications</button>
+  <p *ngIf="invalidSpeciePK"> Espèce invalide </p>
+
 </div>
 

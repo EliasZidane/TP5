@@ -16,7 +16,11 @@ export class EditComponent implements OnInit {
   // public guests: Guest[] = [];
   statusId : number;
   predatorId : number;
-  statusOptions:{id:number,name: string}[] = [];
+  statusOptions:{id:number,name: string}[] = [
+    {id: 0, name: 'Non menacée'},
+    {id: 1, name: 'Préoccupation mineure'},
+    {id: 2, name: 'Vulnérable'}
+  ]
   predatorOptions:{id:number,name: string|null}[] = [];
   public specie: Especeoiseau = {
     nomscientifique: "",
@@ -48,12 +52,8 @@ export class EditComponent implements OnInit {
       const scientificName = params.get('nomscientifique');
       if (scientificName) {
         this.communicationService.getSpecieData(scientificName).subscribe((specieData:{specie: Especeoiseau, statuses: string[], predators: string[]}) => {
-          console.log("recu après requete",specieData)
+        
           this.specie = specieData.specie;
-          this.statusOptions = specieData.statuses.map((option, index) => ({
-            id: index,
-            name: option,
-        }));
           this.predatorOptions = specieData.predators.map((option, index) => ({
             id: index,
             name: option,
@@ -86,7 +86,10 @@ export class EditComponent implements OnInit {
   
 
   public updateSpecie(specie: Especeoiseau)  {
-    console.log("Va update avec : ",specie)
+    if (!specie.nomscientifique.match(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/) || specie.nomscientifique.length < 2 || specie.nomscientifique.length > 30){
+      this.invalidSpeciePK = true;
+      return;
+    }
     this.communicationService.updateSpecie(specie).subscribe((result: number) => {
       if (result === 0) {
         this.duplicateError = true;

@@ -49,9 +49,8 @@ export class DatabaseController {
         var scientificName = req.params.scientificName ? req.params.scientificName : "";
         this.databaseService
           .getSpecieByName(scientificName)
-          .then((result:{specie: pg.QueryResult, statuses: pg.QueryResult, predators: pg.QueryResult}) => {
-            // console.log(result);
-            const speciesData = {specie: result.specie.rows[0], statuses: result.statuses.rows.map((status: any) => status.statutspeces), predators: result.predators.rows.map((predator: any) => predator.nomscientifique)};
+          .then((result:{specie: pg.QueryResult,predators: pg.QueryResult}) => {
+            const speciesData = {specie: result.specie.rows[0], predators: result.predators.rows.map((predator: any) => predator.nomscientifique)};
             res.json(speciesData);
           })
 
@@ -85,10 +84,8 @@ export class DatabaseController {
       (req: Request, res: Response, _: NextFunction) => {
         this.databaseService
           .getOptions()
-          .then((result:{statuses: pg.QueryResult, predators: pg.QueryResult}) => {
-            // console.log(result);
-            const options = {statuses: result.statuses.rows.map((status: any) => status.statutspeces), predators: result.predators.rows.map((predator: any) => predator.nomscientifique)};
-            res.json(options);
+          .then((predators: pg.QueryResult) => {
+            res.json(predators.rows.map((predator: any) => predator.nomscientifique));
           })
 
           .catch((e: Error) => {
@@ -138,10 +135,9 @@ export class DatabaseController {
     //   }
     // );
 
-    router.post(
+    router.delete(
       "/birdSpecies/",
       (req: Request, res: Response, _: NextFunction) => {
-        console.log("Va delete ",req.body)
         this.databaseService
           .deleteSpecie(req.body.nomscientifique)
           .then((result: pg.QueryResult) => {
